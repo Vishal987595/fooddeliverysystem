@@ -25,6 +25,11 @@ app.register_blueprint(restaurant)
 @app.route('/')
 def index():
     return "This is an example app"
+
+@app.route('/home')
+def home():
+    return render_template('index.html')
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     msg = ''

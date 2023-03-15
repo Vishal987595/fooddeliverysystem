@@ -1,20 +1,18 @@
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title> Index </title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">                    
-    </head>
-    <body></br></br></br></br></br>
-        <div align="center">
-          <div align="center" class="border">
-             <div class="header">
-                <h1 class="word">Index</h1>
-             </div></br></br></br>
-                <h1 class="bottom">
-                     Hi {{session.username}}!!</br></br> Welcome to the index page...                
-                </h1></br></br></br>
-                <a href="{{ url_for('logout') }}" class="btn">Logout</a>
-          </div>
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mb-5">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-8 col-sm-12 offset-md-1 p-4 text-center">
+            <h1>Online Food Delivery Service</h1>
         </div>
-    </body>
-</html>
+    </div>
+    <div class="row justify-content-center mt-1">
+        <div class="card col-md-5 col-sm-12 offset-md-1 p-4 text-center">
+            <a href="#" class="btn btn-outline-primary"> Login Customer</a> 
+            <a href="#" class="btn btn-outline-primary"> Login Restaurant</a> 
+            <a href="#" class="btn btn-outline-primary"> Login Delivery Agent</a> 
+        </div>
+    </div>
+</div>
+{% endblock content %}
