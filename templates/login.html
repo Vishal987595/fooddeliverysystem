@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="container mx-30 my-5">
-<form>
+<form method="POST">
     <legend>Login Details</legend>
     <div class="mb-3">
       <input required type="email" name="useremail" placeholder="example@gmail.com" class="form-control" id="useremail" aria-describedby="emailHelp">
@@ -13,8 +13,8 @@
     </div>
     
     <div class="mb-3">
-        <label for="disabledSelect" class="form-label">Disabled select menu</label>
-        <select id="disabledSelect" class="form-select">
+        <label for="authority" class="form-label">User authority</label>
+        <select id="authority" name="authority" class="form-select">
           <option>Customer</option>
           <option>Restaurant</option>
           <option>Delivery Agent</option>

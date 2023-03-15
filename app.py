@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_mysqldb import MySQL
+import flask
 import yaml
 import MySQLdb.cursors
 import re
@@ -34,20 +35,49 @@ def home():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     msg = ''
-    if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
-        username = request.form['username']
+    if request.method == 'POST' and 'useremail' in request.form and 'password' in request.form and 'authority' in request.form:
+        useremail = request.form['useremail']
         password = request.form['password']
+        authority = request.form['authority']
+        print(authority)
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM accounts WHERE username = % s AND password = % s', (username, password, ))
-        account = cursor.fetchone()
-        if account:
-            session['loggedin'] = True
-            session['id'] = account['id']
-            session['username'] = account['username']
-            msg = 'Logged in successfully !'
-            return render_template('index.html', msg = msg)
+        if (authority == "Customer"):
+            cursor.execute('SELECT * FROM Customers WHERE email = % s AND password = % s', (useremail, password, ))
+            account = cursor.fetchone()
+            if account:
+                session['bool'] = True
+                session['customer_ID'] = account['customer_ID']
+                msg = 'Logged in successfully !'
+                flask.flash(msg)
+                return render_template('index.html', message=msg)
+            else:
+                print("not good")
+                msg = 'Incorrect username / password !'
+        elif (authority == "Delivery Agent"):
+            cursor.execute('SELECT * FROM delivery_agent WHERE email = % s', (useremail, ))
+            account = cursor.fetchone()
+            if account:
+                session['bool'] = True
+                session['agent_ID'] = account['agent_ID']
+                msg = 'Logged in successfully !'
+                flask.flash(msg)
+                return render_template('index.html', message=msg)
+            else:
+                msg = 'Incorrect username / password !'
+        elif (authority == "Restaurant"):
+            cursor.execute('SELECT * FROM restaurant WHERE email = % s', (useremail, ))
+            account = cursor.fetchone()
+            if account:
+                session['bool'] = True
+                session['restaurant_ID'] = account['restaurant_ID']
+                msg = 'Logged in successfully !'
+                flask.flash(msg)
+                return render_template('index.html', message=msg)
+            else:
+                msg = 'Incorrect username / password !'
         else:
             msg = 'Incorrect username / password !'
+            flask.flash(msg)
     return render_template('login.html', msg = msg)
 
 @app.route('/logout')
