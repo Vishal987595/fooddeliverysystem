@@ -31,6 +31,9 @@ def index():
 def home():
     return render_template('index.html')
 
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    return render_template('signup.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
