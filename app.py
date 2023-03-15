@@ -80,6 +80,11 @@ def login():
             flask.flash(msg)
     return render_template('login.html', msg = msg)
 
+# about us url
+@app.route('/aboutus')
+def aboutus():
+    return render_template('aboutus.html')
+
 @app.route('/logout')
 def logout():
     session.pop('loggedin', None)
