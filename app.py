@@ -42,7 +42,6 @@ def login():
         useremail = request.form['useremail']
         password = request.form['password']
         authority = request.form['authority']
-        print(authority)
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         if (authority == "Customer"):
             cursor.execute('SELECT * FROM Customers WHERE email = % s AND password = % s', (useremail, password, ))

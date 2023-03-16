@@ -22,17 +22,17 @@
 <div class="container-fluid bg-white">
   <div class="container-fluid d-flex flex-column p-5 flex-sm-row">
     <div class="container">
-      <div class="container"><h3 class="fw-bold">User Name</h3></div>
+      <div class="container"><h4 class="fw-bold">User Name: {{context['first_name'] + ' ' + context['last_name']}}</h4></div>
       <div class="container">
-        <span> UserPhone number </span> <span> | </span>
-        <span> user email </span>
+        <span> UserPhone number : {{context['phone_no']}} </span> <br>
+        <span> user email: {{context['email']}} </span>
       </div>
     </div>
     <button class="btn btn-outline-dark" type="submit">Edit Profile</button>
   </div>
   <div class="container w-full bg-light pb-3">
+    {% if not context['order_placed'] %}
     <div class="text-center p-2"><h4 class="fw-bold">Your Orders</h4></div>
-    
     <div class="d-flex flex-column align-items-center py-3 disebled">
       <div><p>You orders will be listed here</p></div>
       <div class="d-flex justify-content-center rounded-circle overflow-hidden" style="width: 150px; height: 150px;">
@@ -43,7 +43,7 @@
         <p>You have not placed any order yet</p>
       </div>
     </div>
-    
+    {% endif %}
     <div class="shadow-sm card border-1 bg-white  mb-2">
       <div class="row g-0">
         <div class="col-md-2 d-flex align-items-center">
