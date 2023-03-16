@@ -1,7 +1,7 @@
 {% extends 'customer/base.html' %}
 
 {% block content %}
-<div class="container mb-1">
+<div class="container  mb-1">
     <div class="row justify-content-center mt-5">
         <div class="col-md-6 col-sm-12 text-center">
             <h1>What's On Our Menu?</h1>
@@ -18,19 +18,22 @@
         </div>
     </div>
     
-    <div class="pt-5">
-        <div class="row">
+    <div class="container ">
+        <div class="row flex-nowrap overflow-auto">
             {% for type in cuisines %}
-            <div class="card mx-5" style="width: 18rem;">
-                <img src="{{'/static/Cuisine_Images/'+type + '.jpg'}}" class="card-img-top" alt="cuisine type">
+            <div class="card col-12 col-sm-6 col-md-4 col-lg-3 mx-3 bg-light my-3" style="width: 18rem;">
+                <img src="{{'/static/Cuisine_Images/'+type + '.jpg'}}" class="card-img-top object-fit-fill mt-3" alt="cuisine type" style="height:10rem" >
                 <div class="card-body">
                   <h5 class="card-title">{{type}}</h5>
-                  <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                  <a href="#" class="btn btn-primary">Go somewhere</a>
+                  
+                  <div><button class="btn btn-primary">Get Restaurants</button></div>
                 </div>
             </div>
             {% endfor %}
         </div>
+
     </div>
+
+    
 </div>
 {% endblock content %}
