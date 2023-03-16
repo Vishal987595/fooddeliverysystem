@@ -10,3 +10,7 @@ def users():
 def dashboard():
 
     return render_template("customer/dashboard.html")
+
+@customer.route('/userprofile')
+def userprofile():
+    return render_template('customer/userprofile.html')

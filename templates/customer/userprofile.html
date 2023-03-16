@@ -1,0 +1,95 @@
+{% extends 'customer/base.html' %} {% block content %}
+
+<style>
+  body {
+    background-color: back;
+  }
+  .avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto;
+  }
+
+  .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+</style>
+
+<div class="container-fluid bg-white">
+  <div class="container-fluid d-flex flex-column p-5 flex-sm-row">
+    <div class="container">
+      <div class="container"><h3 class="fw-bold">User Name</h3></div>
+      <div class="container">
+        <span> UserPhoen number </span> <span> | </span>
+        <span> user email </span>
+      </div>
+    </div>
+    <button class="btn btn-outline-dark" type="submit">Edit Profile</button>
+  </div>
+  <div class="container w-full bg-light pb-3">
+    <div class="text-center p-2"><h4 class="fw-bold">Your Orders</h4></div>
+    
+    <div class="d-flex flex-column align-items-center py-3 disebled">
+      <div><p>You orders will be listed here</p></div>
+      <div class="d-flex justify-content-center rounded-circle overflow-hidden" style="width: 150px; height: 150px;">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQLDNSP2Ua5fNEHOYES8WPHYXoamwN9LqEuaw&usqp=CAU" alt="Product Image" class="w-100 h-100">
+      </div>
+      <div class="text-center mt-5 pt-3">
+        <h4>No Order</h4>
+        <p>You have not placed any order yet</p>
+      </div>
+    </div>
+    
+    <div class="shadow-sm card border-1 bg-white  mb-2">
+      <div class="row g-0">
+        <div class="col-md-2 d-flex align-items-center">
+          <div class="d-flex justify-content-center rounded-circle overflow-hidden" style="width: 150px; height: 150px;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Eq_it-na_pizza-margherita_sep2005_sml.jpg/800px-Eq_it-na_pizza-margherita_sep2005_sml.jpg" alt="Product Image" class="w-100 h-100">
+          </div>
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start">
+              <div class="col-md-4">
+                <h5 class="card-title">Product Name</h5>
+                <p class="card-text">$99.99</p>
+              </div>
+              <p class="card-text">Lorem ipsum dolor si adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="shadow-sm card border-1 bg-white  mb-2">
+      <div class="row g-0">
+        <div class="col-md-2 d-flex align-items-center">
+          <div class="d-flex justify-content-center rounded-circle overflow-hidden" style="width: 150px; height: 150px;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Eq_it-na_pizza-margherita_sep2005_sml.jpg/800px-Eq_it-na_pizza-margherita_sep2005_sml.jpg" alt="Product Image" class="w-100 h-100">
+          </div>
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start">
+              <div class="col-md-4">
+                <h5 class="card-title">Product Name</h5>
+                <p class="card-text">$99.99</p>
+              </div>
+              <p class="card-text">Lorem ipsum dolor si adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>  
+
+    
+    
+    
+  </div>
+</div>
+
+{% endblock content %}

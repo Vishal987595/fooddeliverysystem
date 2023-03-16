@@ -88,6 +88,8 @@ def login():
 def aboutus():
     return render_template('aboutus.html')
 
+
+
 @app.route('/logout')
 def logout():
     session.pop('loggedin', None)
