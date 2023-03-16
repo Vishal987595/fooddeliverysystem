@@ -52,7 +52,7 @@ def login():
                 session['customer_ID'] = account['customer_ID']
                 msg = 'Logged in successfully !'
                 flask.flash(msg)
-                return render_template('index.html', message=msg)
+                return redirect(url_for("customer.dashboard"),)
             else:
                 print("not good")
                 msg = 'Incorrect username / password !'

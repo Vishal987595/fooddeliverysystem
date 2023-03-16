@@ -8,7 +8,6 @@ def users():
 
 @customer.route('/dashboard')
 def dashboard():
-
     return render_template("customer/dashboard.html")
 
 @customer.route('/userprofile')
