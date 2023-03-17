@@ -37,18 +37,8 @@ def home():
 def signup():
     return render_template('signup.html')
 
-# making rout for sign up for all three types of users
-@app.route('/signupcustomer')
-def signupcustomer():
-    return render_template('customersignup.html')
 
-@app.route('/signupreastaurant')
-def signupreastaurant():
-    return render_template('restaurantsignup.html')
 
-@app.route('/signupdeliveryagent')
-def signupdeliveryagent():
-    return render_template('deliveryagentsignup.html')
 
 
 
@@ -97,6 +87,26 @@ def login():
             msg = 'Incorrect username / password !'
             flask.flash(msg)
     return render_template('login.html', msg = msg)
+
+
+# making rout for sign up for all three types of users
+@app.route('/signupcustomer',methods=['GET', 'POST'])
+def signupcustomer():
+    if request.method == 'POST':
+        return redirect(url_for('login'))
+    return render_template('customersignup.html')
+
+@app.route('/signupreastaurant')
+def signupreastaurant():
+    if request.method == 'POST':
+        return redirect(url_for('login'))
+    return render_template('restaurantsignup.html')
+
+@app.route('/signupdeliveryagent')
+def signupdeliveryagent():
+    if request.method == 'POST':
+        return redirect(url_for('login'))
+    return render_template('deliveryagentsignup.html')
 
 # about us url
 @app.route('/aboutus')

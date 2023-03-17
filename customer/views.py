@@ -41,7 +41,7 @@ def userprofile():
             "last_name": account[2],
             "email": account[4], 
             "phone_no": account[5], 
-            "order_placed": (len(orders) > 0),
+            "order_placed": (len(orders) > 0), 
         }
         return render_template('customer/userprofile.html', context=context, orders=orders)
     return render_template('customer/userprofile.html')
