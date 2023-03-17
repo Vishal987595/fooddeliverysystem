@@ -35,3 +35,7 @@ def userprofile():
         print(context)
         return render_template('customer/userprofile.html', context=context)
     return render_template('customer/userprofile.html')
+
+@customer.route('/resslist')
+def resslist():
+    return render_template('customer/resslist.html')
