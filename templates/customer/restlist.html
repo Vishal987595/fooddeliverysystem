@@ -6,56 +6,26 @@
 <div class="container">
   <h1 class="text-center mt-5">Result is Here </h1>
   <div class="shadow-sm card d-flex flex-column bg-white">
-  
-  
+    {% for rest in rests %}
     <div class="d-flex row rounded shadow-sm  bg-light">
       <div class="p-2 flex-fill">
         <div class="card-body">
-          <h5 class="card-title">Restaurant Name</h5>
-          <p class="card-text"><i class="bi bi-envelope"></i> Email: restaurant@examples</p>
-          <p class="card-text"><i class="bi bi-phone"></i> Phone: 123-456-7890</p>
-          <p class="card-text"><i class="bi bi-phone"></i> Rating: 4</p>
+          <h5 class="card-title">Restaurant Name: {{rest['name']}}</h5>
+          <p class="card-text"><i class="bi bi-envelope"></i> Email: {{rest['email']}}</p>
+          <p class="card-text"><i class="bi bi-phone"></i> Phone: {{rest['phone']}}</p>
+          <p class="card-text"><i class="bi bi-phone"></i> Rating: {{rest['rating']}}</p>
         </div>
       </div>
       <div class="p-2 flex-fill">
         <div class="card-body">
           <h5 class="card-title">Restaurant Addr </h5>
-          <p class="card-text"><i class="bi bi-envelope"></i> Street: dsj</p>
-          <p class="card-text"><i class="bi bi-phone"></i> City: Gandhinagar</p>
-          <p class="card-text"><i class="bi bi-phone"></i> State: Gujrat</p>
-        </div>
-      </div>
-      <div class="p-2 flex-fill">
-        <div class="card-body">
-          <h5 class="card-title">Timing</h5>
-          <table class="table">
-            <thead>
-              <tr class="">
-                <th class="p-1" scope="col">Day</th>
-                <th class="p-1" scope="col">Opening Time</th>
-                <th class="p-1" scope="col">Closing Time</th>
-              </tr>
-            </thead>
-            <tbody class="table-group-divider">
-              <tr>
-                <th class="p-1"  scope="row">Mon-Fri</th>
-                <td class="p-1">8:00 AM</td>
-                <td class="p-1">8:00 AM</td>
-              </tr>
-              <tr>
-                <th class="p-1" scope="row">Sat-Sun</th>
-                <td class="p-1">8:00 AM</td>
-                <td class="p-1">8:00 AM</td>
-              </tr>
-             
-              
-            </tbody>
-          </table>
+          <p class="card-text"><i class="bi bi-envelope"></i> City: {{rest['city']}}</p>
+          <p class="card-text"><i class="bi bi-phone"></i> State: {{rest['state']}}</p>
+          <p class="card-text"><i class="bi bi-phone"></i> Pincode: {{rest['pincode']}}</p>
         </div>
       </div>
     </div>
-    
-    
+    {% endfor %}
   </div>
 </div>
 
