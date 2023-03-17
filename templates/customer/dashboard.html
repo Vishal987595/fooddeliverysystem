@@ -12,7 +12,7 @@
         <div class="col-md-8 col-sm-12 text-center">
             <form method="GET" action="{{ url_for('customer.restsearch') }}">
                 <div class="md-form mt-0 active-cyan-2">
-                    <input class="form-control" name="q" type="text" placeholder="Search Restaurants" aria-label="Search" value="">
+                    <input class="form-control" name="query" type="text" placeholder="Search Restaurants" aria-label="Search" value="">
                 </div>
             </form>
         </div>
@@ -25,8 +25,9 @@
                 <img src="{{'/static/Cuisine_Images/'+type + '.jpg'}}" class="card-img-top object-fit-fill mt-3" alt="cuisine type" style="height:10rem" >
                 <div class="card-body">
                   <h5 class="card-title">{{type}}</h5>
-                  
-                  <div><button class="btn btn-primary">Get Restaurants</button></div>
+                  <form method="GET" action="{{ url_for('customer.restlist')}}">
+                    <div><button class="btn btn-primary" name="cuisine" value="{{type}}">Get Restaurants</button></div>
+                    </form>
                 </div>
             </div>
             {% endfor %}

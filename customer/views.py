@@ -1,7 +1,5 @@
-import time
-import datetime
 from . import customer
-from flask import render_template, session, flash, redirect
+from flask import render_template, session, request
 from app import mysql
 
 @customer.route('/users')
@@ -48,13 +46,32 @@ def userprofile():
         return render_template('customer/userprofile.html', context=context, orders=orders)
     return render_template('customer/userprofile.html')
 
-@customer.route('/restlist')
-def resslist():
-    # cursor = mysql.connection.cursor()
-    # cursor.execute('SELECT * FROM Customers WHERE customer_ID = % s')
-    # account = cursor.fetchall()
-    return render_template('customer/restlist.html')
 
-@customer.route('/restlist')
-def restsearch():
-    return render_template('customer/restlist.html')
+# Getting the restaurant list with rating >= Avg rating
+@customer.route('/restlist', methods=['GET'])
+def restlist():
+    if (request.values.get("query")):
+        query = request.values.get("query")
+        query = "%" + query + "%"
+        cursor = mysql.connection.cursor()
+        cursor.execute('select r.name, r.email, r.phone_number, r.rating, address.city, address.pin_code, address.state from restaurant r inner join address on r.rest_address = address.address_ID where r.name like %s ;', (query,))
+        rest_details = cursor.fetchall()    
+    else:
+        cuisine = request.values.get("cuisine")
+        cursor = mysql.connection.cursor()
+        cursor.execute('select distinct r.name, r.email, r.phone_number, r.rating, address.city, address.pin_code, address.state from restaurant r inner join address on r.rest_address = address.address_ID inner join cuisine_type ct on r.restaurant_ID = ct.restaurant_ID where ct.type = %s and r.rating >= ( select avg(rating) from restaurant inner join cuisine_type on restaurant.restaurant_ID = cuisine_type.restaurant_ID where cuisine_type.type = %s ) order by r.rating DESC;', (cuisine, cuisine))
+        rest_details = cursor.fetchall()
+
+    rests = []
+    for detail in rest_details:
+        temp = {
+            'name':detail[0],
+            'email': detail[1],
+            'phone': detail[2],
+            'rating': detail[3],
+            'city': detail[4],
+            'pincode': detail[5],
+            'state': detail[6]
+        }
+        rests.append(temp)
+    return render_template('customer/restlist.html', rests=rests)
