@@ -53,10 +53,9 @@ def login():
                 flask.flash(msg)
                 return redirect(url_for("customer.dashboard"),)
             else:
-                print("not good")
                 msg = 'Incorrect username / password !'
         elif (authority == "Delivery Agent"):
-            cursor.execute('SELECT * FROM delivery_agent WHERE email = % s', (useremail, ))
+            cursor.execute('SELECT * FROM delivery_agent WHERE email = % s AND password = % s', (useremail, password, ))
             account = cursor.fetchone()
             if account:
                 session['bool'] = True
@@ -67,7 +66,7 @@ def login():
             else:
                 msg = 'Incorrect username / password !'
         elif (authority == "Restaurant"):
-            cursor.execute('SELECT * FROM restaurant WHERE email = % s', (useremail, ))
+            cursor.execute('SELECT * FROM restaurant WHERE email = % s AND password = % s', (useremail, password, ))
             account = cursor.fetchone()
             if account:
                 session['bool'] = True
@@ -91,9 +90,7 @@ def aboutus():
 
 @app.route('/logout')
 def logout():
-    session.pop('loggedin', None)
-    session.pop('id', None)
-    session.pop('username', None)
+    session.clear()
     return redirect(url_for('login'))
 
 @app.route('/register', methods =['GET', 'POST'])
