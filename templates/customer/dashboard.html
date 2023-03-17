@@ -10,7 +10,7 @@
 
     <div class="row justify-content-center mt-5">
         <div class="col-md-8 col-sm-12 text-center">
-            <form method="GET" action="">
+            <form method="GET" action="{{ url_for('customer.restsearch') }}">
                 <div class="md-form mt-0 active-cyan-2">
                     <input class="form-control" name="q" type="text" placeholder="Search Restaurants" aria-label="Search" value="">
                 </div>

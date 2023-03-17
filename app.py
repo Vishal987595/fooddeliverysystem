@@ -51,7 +51,7 @@ def login():
                 session['customer_ID'] = account['customer_ID']
                 msg = 'Logged in successfully !'
                 flask.flash(msg)
-                return redirect(url_for("customer.dashboard"),)
+                return redirect(url_for("customer.dashboard"))
             else:
                 msg = 'Incorrect username / password !'
         elif (authority == "Delivery Agent"):

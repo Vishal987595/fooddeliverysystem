@@ -48,6 +48,13 @@ def userprofile():
         return render_template('customer/userprofile.html', context=context, orders=orders)
     return render_template('customer/userprofile.html')
 
-@customer.route('/resslist')
+@customer.route('/restlist')
 def resslist():
-    return render_template('customer/resslist.html')
+    # cursor = mysql.connection.cursor()
+    # cursor.execute('SELECT * FROM Customers WHERE customer_ID = % s')
+    # account = cursor.fetchall()
+    return render_template('customer/restlist.html')
+
+@customer.route('/restlist')
+def restsearch():
+    return render_template('customer/restlist.html')
