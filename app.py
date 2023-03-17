@@ -31,9 +31,26 @@ def index():
 def home():
     return render_template('index.html')
 
+
+
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     return render_template('signup.html')
+
+# making rout for sign up for all three types of users
+@app.route('/signupcustomer')
+def signupcustomer():
+    return render_template('customersignup.html')
+
+@app.route('/signupreastaurant')
+def signupreastaurant():
+    return render_template('restaurantsignup.html')
+
+@app.route('/signupdeliveryagent')
+def signupdeliveryagent():
+    return render_template('deliveryagentsignup.html')
+
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
