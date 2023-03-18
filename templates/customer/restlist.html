@@ -24,6 +24,9 @@
           <p class="card-text"><i class="bi bi-phone"></i> Pincode: {{rest['pincode']}}</p>
         </div>
       </div>
+      <form method="GET" action="{{ url_for('customer.getmenu')}}" class="mt-5">
+        <div><button class="btn btn-primary" name="restaurant" value="{{rest['ID']}}">Check Menu</button></div>
+      </form>
     </div>
     {% endfor %}
   </div>
