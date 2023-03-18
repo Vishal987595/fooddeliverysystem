@@ -11,7 +11,9 @@
     }
 
 </style>
-<div class="text-center mt-3"><h1>{{rest_name}}</h1></div>
+
+<div class="text-center mt-3 h-full"><h1>{{rest_name}}</h1></div>
+<div class="container position-relative overflow-auto">
 <form action="{{ url_for('customer.orderconfirmation')}}" id="items-table" method="POST">
   <table>
     <thead>
@@ -36,7 +38,7 @@
         <td>{{ item['unit_price'] }}</td>
         <td>{{ item['type'] }}</td>
         <td>
-          <div class="input-group">
+          <div class="form">
             <input type="number" class="form-control" name="{{ item['ID'] }}" value="0" min="0" max="10">
           </div>
         </td>
@@ -46,4 +48,5 @@
   </table>
   <button action="{{ url_for('customer.orderconfirmation')}}" type="submit" class="btn btn-primary">Submit</button>
 </form>
+</div>
 {% endblock content %} 

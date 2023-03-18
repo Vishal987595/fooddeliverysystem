@@ -1,6 +1,7 @@
 from . import customer
-from flask import render_template, session, request
+from flask import render_template, session, request, flash
 from app import mysql
+from datetime import datetime
 
 @customer.route('/users')
 def users():
@@ -63,25 +64,28 @@ def restlist():
         rest_details = cursor.fetchall()
 
     rests = []
-    for detail in rest_details:
-        temp = {
-            'ID': detail[0],
-            'name':detail[1],
-            'email': detail[2],
-            'phone': detail[3],
-            'rating': detail[4],
-            'city': detail[5],
-            'pincode': detail[6],
-            'state': detail[7]
-        }
-        print(temp)
-        rests.append(temp)
-    return render_template('customer/restlist.html', rests=rests)
+    if (len(rest_details)):
+        for detail in rest_details:
+            print(detail)
+            temp = {
+                'ID': detail[0],
+                'name':detail[1],
+                'email': detail[2],
+                'phone': detail[3],
+                'rating': detail[4],
+                'city': detail[5],
+                'pincode': detail[6],
+                'state': detail[7],
+            }
+            rests.append(temp)
+        return render_template('customer/restlist.html', rests=rests)
+    return render_template('customer/dashboard.html')
 
 @customer.route('/menu', methods=['GET', 'POST'])
 def getmenu():
     if (request.values.get("restaurant")):
         rest_ID = request.values.get("restaurant")
+        session['restaurant_order'] = rest_ID
         cursor = mysql.connection.cursor()
         cursor.execute("select name from restaurant where restaurant_ID = %s;", [rest_ID])
         rest = cursor.fetchone()
@@ -104,26 +108,43 @@ def getmenu():
 @customer.route('/orderconfirmation', methods=['GET', 'POST'])
 def orderconfirmation():
     if (request.method=="POST"):
+        rest_ID = session["restaurant_order"]
+
         cursor = mysql.connection.cursor()
+        cursor.execute('select max(order_ID) from orders;')
+        order_ID = cursor.fetchone()
+        order_ID = str(int(order_ID[0]) + 1)
+
+        order_status = "placed"
+        customer_ID = session["customer_ID"]
+        now = datetime.now()
+        order_placed_time = now.strftime('%Y-%m-%d %H:%M:%S')
+
+        cursor.execute("insert into orders(order_ID, order_placed_time, order_status, restaurant_ID, customer_ID) values(%s, %s, %s, %s, %s);", (order_ID, order_placed_time, order_status, rest_ID, customer_ID))
+        mysql.connection.commit()
+
         order_items = []
         total_price = 0
-        for item in request.form:
-            item_ID = item[0]
-            item_quantity = item[1]
-            if (item_quantity):
-                cursor.execute("select name, unit_price, veg, item_type from menu_item where item_ID = %s;", item_ID)
+        for item in request.form.keys():
+            item_ID = item
+            item_quantity = request.form.get(item)
+            if (item_quantity != "0"):
+                cursor.execute("select name, unit_price from menu_item where item_ID = %s;", (str(item_ID),))
                 menu_item = cursor.fetchone()
                 price = int(menu_item[1]) * int(item_quantity)
                 order_item = {
                     'name': menu_item[0],
                     'unit_price': menu_item[1],
-                    'veg': int(item[2]),
-                    'item_type': item[3],
                     'price': price,
                 }
+                cursor.execute("insert into order_items(order_ID, item_ID, quantity) values (%s, %s, %s);", (order_ID, item_ID, item_quantity))
+                mysql.connection.commit()
                 total_price += price
                 order_items.append(order_item)
-        return render_template("customer/orderconfirmation.html", total_price=total_price, order_items=order_items)
-
+        cursor.execute("select name from restaurant where restaurant_ID = %s;", (str(rest_ID),))
+        rest_name = cursor.fetchone()[0]
+        cursor.close()
+        flash("Order successfully submitted.")
+        return render_template("customer/orderconfirmation.html", total_price=total_price, items=order_items, rest_name=rest_name)
 
     return render_template("customer/menu.html")
