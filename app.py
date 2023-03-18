@@ -93,18 +93,64 @@ def login():
 @app.route('/signupcustomer',methods=['GET', 'POST'])
 def signupcustomer():
     if request.method == 'POST':
+        msg = 'CUSTOMER: Please fill out the form again'
+        userdetails = request.form
+        firstname = userdetails['firstname']
+        lastname = userdetails['lastname']
+        email = userdetails['email']
+        DOB = userdetails['DOB']
+        phone_number = userdetails['phone_number']
+        password = userdetails['password']
+        cur = mysql.connection.cursor()
+        cur.execute('select max(customer_ID) from customers')
+        ID = cur.fetchone()
+        ID = str(int(ID[0]) + 1)
+        cur.execute('insert into customers(customer_ID, first_name, last_name, email, phone_no, password, DOB) values(%s, %s, %s, %s, %s , %s, %s)', (ID, firstname, lastname, email, phone_number, password, DOB))
+        mysql.connection.commit()
+        cur.close()
+        msg = 'CUSTOMER: sigup successfully!!'
+        flask.flash(msg)
         return redirect(url_for('login'))
     return render_template('customersignup.html')
 
-@app.route('/signupreastaurant')
+@app.route('/signupreastaurant', methods=['GET', 'POST'])
 def signupreastaurant():
     if request.method == 'POST':
+        msg = 'Restaurant please fill out the form again'
+        restdetail = request.form
+        name = restdetail['name']
+        email = restdetail['email']
+        phoneno = restdetail['Phone number']
+        password = restdetail['password']
+        # Keeping weekend_time and weekday_time as null values
+        # For now keeping rest_address from our side
+        rest_address = str(3)
+        cur = mysql.connection.cursor()
+        cur.execute('select max(restaurant_ID) from restaurant')
+        ID = cur.fetchone()
+        ID = str(int(ID[0]) + 1)
+        cur.execute('insert into restaurant(restaurant_ID, name, email, phone_number, rest_address, password) values(%s, %s, %s, %s, %s, %s)', (ID, name, email, phoneno, rest_address, password))
+        mysql.connection.commit()
+        cur.close()
+        msg = 'RESTAURANT sigup successfully!!'
+        flask.flash(msg)
         return redirect(url_for('login'))
     return render_template('restaurantsignup.html')
 
-@app.route('/signupdeliveryagent')
+@app.route('/signupdeliveryagent', methods=['GET', 'POST'])
 def signupdeliveryagent():
     if request.method == 'POST':
+        msg = 'Agent please fill out the form again'
+        agentdetail = request.form
+        cur = mysql.connection.cursor()
+        cur.execute('select max(agent_ID) from delivery_agent;')
+        ID = cur.fetchone()
+        ID = str(int(ID[0]) + 1)
+        cur.execute('insert into delivery_agent(agent_ID, first_name, middle_name, last_name, phone_no, email, DOB, password) values(%s, %s, %s, %s, %s, %s, %s, %s)', (ID, agentdetail['firstName'], agentdetail['MiddleName'], agentdetail['lastName'], agentdetail['Phone number'], agentdetail['email'], agentdetail['DOB'], agentdetail['password']))
+        mysql.connection.commit()
+        cur.close()
+        msg = 'AGENT sigup successfully!!'
+        flask.flash(msg)
         return redirect(url_for('login'))
     return render_template('deliveryagentsignup.html')
 
