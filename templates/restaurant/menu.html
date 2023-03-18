@@ -1,0 +1,50 @@
+{% extends 'restaurant/base.html'%}
+
+{% block content%}
+<style>
+    .table thead {
+    background-color: #4eafc3;
+    }
+
+    .table td {
+    font-size: 14px;
+    }
+
+</style>
+<div class="text-center mt-3"><h1>{{rest_name}}</h1></div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Item Name</th>
+        <th>Unit Price</th>
+        <th>Veg/Non-veg</th>
+        <th>Type</th>
+        <th>Quantity</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in items %}
+      <tr>
+        <td>{% if (item['veg_nonveg']) %}
+          <span style="color:green;padding:0 .3em">&#9679;&#8414;</span>
+          {% else %}
+          <span style="color:red;padding:0 .3em">&#9679;&#8414;</span>
+          {% endif %} 
+        </td>
+        <td>{{ item['name'] }}</td>
+        <td>{{ item['unit_price'] }}</td>
+        <td>{{ item['type'] }}</td>
+        <form>
+        <td>
+          <div class="input-group">
+            <input type="number" class="form-control" name="{{ item['ID'] }}" value="0" min="0" max="10">
+          </div>
+        </td>
+        <form>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock content %} 
