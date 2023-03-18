@@ -66,7 +66,7 @@ def login():
                 session['agent_ID'] = account['agent_ID']
                 msg = 'Logged in successfully !'
                 flask.flash(msg)
-                return redirect(url_for('home'))
+                return redirect(url_for('delivery.agentdetail'))
             else:
                 msg = 'Incorrect username / password !'
         elif (authority == "Restaurant"):

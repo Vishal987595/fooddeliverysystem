@@ -56,7 +56,18 @@ def restmenu():
         cursor.execute("select name from restaurant where restaurant_ID = %s;", [rest_ID])
         rest = cursor.fetchone()
         rest_name = rest[0]
-        cursor.execute("select order_ID from orders inner join restaurant r on orders.restaurant_ID = r.restaurant_ID where r.restaurant_ID = %s order by orders.order_placed_time DESC; ", [rest_ID])
-        return render_template('customer/menu.html', rest_name=rest_name)
+        cursor.execute("select name, unit_price, veg, item_type, item_ID from menu_item where restaurant_ID = %s;", [rest_ID])
+        menu_items = cursor.fetchall()
+        items = []
+        for item in menu_items:
+            temp = {
+                'name': item[0],
+                'unit_price': item[1],
+                'veg_nonveg': int(item[2]),
+                'type': item[3],
+                'ID': item[4]
+            }
+            items.append(temp)
+        return render_template('restaurant/menu.html', rest_name=rest_name, items=items)
     return render_template('restaurant/menu.html')
 

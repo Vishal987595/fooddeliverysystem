@@ -55,7 +55,7 @@ def restlist():
         query = request.values.get("query")
         query = "%" + query + "%"
         cursor = mysql.connection.cursor()
-        cursor.execute("select r.name, r.email, r.phone_number, r.rating, address.city, address.pin_code, address.state from restaurant r inner join address on r.rest_address = address.address_ID where r.name like %s ;", (query,))
+        cursor.execute("select r.restaurant_ID, r.name, r.email, r.phone_number, r.rating, address.city, address.pin_code, address.state from restaurant r inner join address on r.rest_address = address.address_ID where r.name like %s ;", (query,))
         rest_details = cursor.fetchall()    
     else:
         cuisine = request.values.get("cuisine")

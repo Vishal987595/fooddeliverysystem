@@ -11,16 +11,16 @@
     }
 
 </style>
-<div class="text-center mt-3"><h1>{{rest_name}}</h1></div>
-
-  <table>
+<div class="container text-center mt-3"><h1>{{rest_name}}</h1></div>
+<div class="container">
+<div class="row">
+  <table class="table table-bordered table-striped">
     <thead>
       <tr>
+        <th>Veg/Non-veg</th>
         <th>Item Name</th>
         <th>Unit Price</th>
-        <th>Veg/Non-veg</th>
         <th>Type</th>
-        <th>Quantity</th>
       </tr>
     </thead>
     <tbody>
@@ -35,16 +35,11 @@
         <td>{{ item['name'] }}</td>
         <td>{{ item['unit_price'] }}</td>
         <td>{{ item['type'] }}</td>
-        <form>
-        <td>
-          <div class="input-group">
-            <input type="number" class="form-control" name="{{ item['ID'] }}" value="0" min="0" max="10">
-          </div>
-        </td>
-        <form>
       </tr>
       {% endfor %}
     </tbody>
   </table>
+</div>
+</div>
 
 {% endblock content %} 
