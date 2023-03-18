@@ -29,17 +29,12 @@ def index():
 
 @app.route('/home')
 def home():
+    session.clear()
     return render_template('index.html')
-
-
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     return render_template('signup.html')
-
-
-
-
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -51,36 +46,39 @@ def login():
         authority = request.form['authority']
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         if (authority == "Customer"):
-            cursor.execute('SELECT * FROM Customers WHERE email = % s AND password = % s', (useremail, password, ))
+            cursor.execute("SELECT * FROM Customers WHERE email = % s AND password = % s", (useremail, password,))
             account = cursor.fetchone()
             if account:
-                session['bool'] = True
-                session['customer_ID'] = account['customer_ID']
+                session['customerbool'] = True
+                session['restbool'], session['agentbool'] = False, False
+                session['customer_ID'] = str(account['customer_ID'])
                 msg = 'Logged in successfully !'
                 flask.flash(msg)
                 return redirect(url_for("customer.dashboard"))
             else:
                 msg = 'Incorrect username / password !'
         elif (authority == "Delivery Agent"):
-            cursor.execute('SELECT * FROM delivery_agent WHERE email = % s AND password = % s', (useremail, password, ))
+            cursor.execute("SELECT * FROM delivery_agent WHERE email = % s AND password = % s", (useremail, password, ))
             account = cursor.fetchone()
             if account:
-                session['bool'] = True
+                session['agentbool'] = True
+                session['cutomerbool'], session['restbool'] = False, False
                 session['agent_ID'] = account['agent_ID']
                 msg = 'Logged in successfully !'
                 flask.flash(msg)
-                return render_template('index.html', message=msg)
+                return redirect(url_for('home'))
             else:
                 msg = 'Incorrect username / password !'
         elif (authority == "Restaurant"):
-            cursor.execute('SELECT * FROM restaurant WHERE email = % s AND password = % s', (useremail, password, ))
+            cursor.execute("SELECT * FROM restaurant WHERE email = % s AND password = % s", (useremail, password, ))
             account = cursor.fetchone()
             if account:
-                session['bool'] = True
+                session['restbool'] = True
+                session['agentbool'], session['customerbool'] = False, False
                 session['restaurant_ID'] = account['restaurant_ID']
                 msg = 'Logged in successfully !'
                 flask.flash(msg)
-                return render_template('index.html', message=msg)
+                return redirect(url_for('home'))
             else:
                 msg = 'Incorrect username / password !'
         else:
@@ -102,10 +100,10 @@ def signupcustomer():
         phone_number = userdetails['phone_number']
         password = userdetails['password']
         cur = mysql.connection.cursor()
-        cur.execute('select max(customer_ID) from customers')
+        cur.execute("select max(customer_ID) from customers")
         ID = cur.fetchone()
         ID = str(int(ID[0]) + 1)
-        cur.execute('insert into customers(customer_ID, first_name, last_name, email, phone_no, password, DOB) values(%s, %s, %s, %s, %s , %s, %s)', (ID, firstname, lastname, email, phone_number, password, DOB))
+        cur.execute("insert into customers(customer_ID, first_name, last_name, email, phone_no, password, DOB) values(%s, %s, %s, %s, %s , %s, %s)", (ID, firstname, lastname, email, phone_number, password, DOB))
         mysql.connection.commit()
         cur.close()
         msg = 'CUSTOMER: sigup successfully!!'
@@ -113,8 +111,8 @@ def signupcustomer():
         return redirect(url_for('login'))
     return render_template('customersignup.html')
 
-@app.route('/signupreastaurant', methods=['GET', 'POST'])
-def signupreastaurant():
+@app.route('/signuprestaurant', methods=['GET', 'POST'])
+def signuprestaurant():
     if request.method == 'POST':
         msg = 'Restaurant please fill out the form again'
         restdetail = request.form
