@@ -1,78 +1,89 @@
 {% extends 'restaurant/base.html' %} {% block content %}
 <style>
-  body{
-    background-color:#d9d9d9;
+  body {
+    background-color: #d9d9d9;
   }
 </style>
 
-<section class="pb-24 position-relative overflow-hidden ">
+<section class="pb-24 position-relative overflow-hidden">
   <div class="container">
     <div class="row mt-12">
       <div class="col-12">
         <div class="mw-2xl text-center mx-auto">
-          <header >
+          {% if(rest_name ) %}
+          <header>
+            <h1 class="mt-5 mb-0 lh-sm">
+              <span>{{rest_name}}</span>
+            </h1>
+          </header>
+          {%else%}
+          <header>
             <h1 class="mt-5 mb-0 lh-sm">
               <span>Restaurant</span>
-              <!-- <span class="text-primary">ambitious</span> -->
               <span>Name</span>
             </h1>
           </header>
-          <br />
-          <!-- <p class="mb-0 mt-4 lh-lg mw-lg px-xl-4 mx-auto">
-            Pstls. Kit uses attractive colors and modern typography to make you
-            look good, no matter what business you’re in.
-          </p> -->
+          {%endif%}
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<section  >
+<section>
   <div class="container w-full bg-white pb-3">
     <div class="text-center p-2"><h4 class="fw-bold">Your Delieveries</h4></div>
+
     
-   
-    
-    <div class=" card bg-light mb-5">
-      
-      <div class=" shadow-sm container ">
-      <div class="row g-0 bg-white border mb-3">
-        <div class="col-md-2 d-flex align-items-center">
-          <div class="d-flex justify-content-center rounded-circle overflow-hidden" style="width: 150px; height: 150px;">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Eq_it-na_pizza-margherita_sep2005_sml.jpg/800px-Eq_it-na_pizza-margherita_sep2005_sml.jpg" alt="Product Image" class="w-100 h-100">
-          </div>
-        </div>
-        <div class="col-md-8">
-          <div class="card-body">
-            <div class="d-flex justify-content-between align-items-start">
-              <div class="col-md-4">
-                <table class="table table-bordered" style="height: max-content; width: max-content;">
-                  <tr class="d-flex">
-                    <td>Item Name</td>
-                    <td>Item Price</td>
-                    <td>Item Quantity</td>
-                  </tr>
-                  <tr class="d-flex">
-                    <td>Item Name</td>
-                    <td>Item Price</td>
-                    <td>Item Quantity</td>
-                  </tr>
-                </table>
+      {%for order in orders %}
+      <div class="card bg-light mb-5">
+        <div class="shadow-sm container">
+          <div class="row g-0 bg-white border mb-3">
+            <div class="col-md-2 d-flex align-items-center">
+              <div class="d-flex justify-content-center rounded-circle overflow-hidden"style="width: 150px; height: 150px">
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Eq_it-na_pizza-margherita_sep2005_sml.jpg/800px-Eq_it-na_pizza-margherita_sep2005_sml.jpg"
+                  alt="Product Image"
+                  class="w-100 h-100"
+                />
               </div>
-              <div class="col-md-4">
-                <p class="card-text">Amount: </p>
-                <p class="card-text">Order time: </p>
-                <p class="card-text">Order status: </p>
+            </div>
+
+            <div class="col-md-8">
+              <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                  <div class="col-md-4">
+                    <table class="table table-bordered"
+                      style="height: max-content; width: max-content">
+                      <tr class="d-flex">
+                        <td>Item Name</td>
+                        <td>Item Price</td>
+                        <td>Item Quantity</td>
+                      </tr>
+                      {%for item in order["order_item"]%}
+                      <tr class="d-flex">
+                        <td>{{item["name"]}}</td>
+                        <td>{{item["unit_price"]}}</td>
+                        <td>{{item["quantity"]}}</td>
+                      </tr>
+                      {%endfor%}
+                    </table>
+                  </div>
+                  <div class="col-md-4">
+                    <p class="card-text">{{order["net_price"]}}</p>
+                    <p class="card-text">{{order["order_placed_time"]}}</p>
+                    <p class="card-text">{{order["order_status"]}}</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-      
+      {%endfor%}
     </div>
   </div>
+  
 </section>
 
 {% endblock content %}
