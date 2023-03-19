@@ -15,15 +15,15 @@ app.register_blueprint(restaurant)
 app.register_blueprint(customer)
 app.register_blueprint(delivery)
 
-
-@app.route('/')
-def index():
-    return "This is an example app"
-
 @app.route('/home')
 def home():
     session.clear()
     return render_template('index.html')
+
+
+@app.route('/')
+def index():
+    return redirect(url_for('home'))
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -146,9 +146,46 @@ def signupdeliveryagent():
     return render_template('deliveryagentsignup.html')
 
 # about us url
-@app.route('/aboutus')
+@app.route('/aboutus', methods=["GET", "POST"])
 def aboutus():
-    return render_template('aboutus.html')
+    if (request.method=="POST"):
+        cur = mysql.connection.cursor()
+        renaming_col =str( request.values.get("col_name"))
+        rename_value =str( request.values.get("new_name"))
+        if (rename_value != ""):
+            query = f"ALTER TABLE `team_details` RENAME COLUMN `{renaming_col}` TO `{rename_value}`;"
+            cur.execute(query)
+            mysql.connection.commit()
+            cur.close()
+            flask.flash("Successfully renamed the column")
+        else:
+            flask.flash("Please put up rename value of the column.")
+    query = "SELECT column_name FROM information_schema.columns WHERE table_name = %s"
+    tablename = 'Team_details'  
+    cur = mysql.connection.cursor()
+    cur.execute(query, ("Team_details",))
+    col_name = cur.fetchall();
+
+    table ={
+        'roll_number':col_name[0][0],
+        'first_name':col_name[1][0],
+        'last_name':col_name[2][0],
+        'emailid':col_name[3][0],
+    }
+
+    cur.execute("select * from Team_details")
+    students = cur.fetchall();
+    student_details=[]
+    for student in students:
+        temp = {
+            'roll_number':student[0],
+            'first_name':student[1],
+            'last_name':student[2],
+            'emailid':student[3]
+        }
+        student_details.append(temp)
+    
+    return render_template('aboutus.html',tablename=tablename, table = table, student_details= student_details)
 
 
 

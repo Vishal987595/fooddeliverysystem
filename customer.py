@@ -1,4 +1,4 @@
-from flask import render_template, session, request, flash, Blueprint
+from flask import render_template, session, request, flash, Blueprint, url_for, redirect
 from datetime import datetime
 
 customer = Blueprint('customer', __name__)
@@ -30,6 +30,9 @@ def userprofile():
         cursor.execute(sql, val)
         mysql.connection.commit()
         cursor.close()
+    if (session['customerbool'] == False):
+        flash("Please sign in using customer account.")
+        return redirect(url_for('login'))
     ID = session['customer_ID']
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT * FROM Customers WHERE customer_ID = %s", (ID,))

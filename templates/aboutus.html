@@ -1,6 +1,13 @@
 {% extends 'customer/base.html' %}
 
 {% block content %}
+{% with messages = get_flashed_messages() %} {% if messages %} 
+  {% for message in messages %}
+    <div class="alert alert-success text-center" role="alert" id="flash-message">
+      <div>{{ message }}</div>
+    </div>
+  {% endfor %} 
+  {% endif %}{%endwith%}
 
 <style>
     body {
@@ -92,7 +99,67 @@
                 </div>
             </div>
         </div2>
+
+
     </div>
+
+    <div1 class="jumbotron py-5 bg-light">
+        <div class="container">
+            
+
+            <br>
+            <h2 class="text-center mb-3 ">{{tablename}}</h2>
+            <hr>    
+            <div class="row">
+                <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                    <th>{{table['roll_number']}}</th>
+                    <th>{{table['first_name']}}</th>
+                    <th>{{table['last_name']}}</th>
+                    <th>{{table['emailid']}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for student in student_details %}
+                    <tr>
+                    <td>{{student['roll_number']}}</td>
+                    <td>{{student['first_name']}}</td>
+                    <td>{{student['last_name']}}</td>
+                    <td>{{student['emailid']}}</td>
+                    
+                    </tr>
+                {% endfor %}
+                </tbody>
+                </table>
+            </div>
+        </div>
+
+        <br>
+        <hr>
+        <div class="container">
+            <form role="search" method="POST">
+            <div class="row">
+                <div class="co-md-4">
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="inputGroupSelect01">Column to rename</label>
+                        <select class="form-select" id="inputGroupSelect01" name="col_name">
+                            <option>{{table['roll_number']}}</option>
+                            <option>{{table['first_name']}}</option>
+                            <option>{{table['last_name']}}</option>
+                            <option>{{table['emailid']}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <input class="form-control me-2" type="search" placeholder="Column Name" aria-label="Column Name" name="new_name" value="">
+                </div>
+                <div class="col-md-4"><button class="btn btn-outline-primary" type="submit">Rename Column Name</button></div>
+            </div>
+            </form>
+        </div>
+
+    </div1>
 </div>
 </body>
 
