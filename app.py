@@ -1,27 +1,20 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-from flask_mysqldb import MySQL
 import flask
-import yaml
+
 import MySQLdb.cursors
 import re
 
 app = Flask(__name__)
-
-# Configure db
-db = yaml.load(open('db.yaml'), Loader=yaml.FullLoader)
-app.config['MYSQL_HOST'] = db['mysql_host']
-app.config['MYSQL_USER'] = db['mysql_user']
-app.config['MYSQL_PASSWORD'] = db['mysql_password']
-app.config['MYSQL_DB'] = db['mysql_db']
-app.secret_key = 'your secret key'
-mysql = MySQL(app)
+from configure import config
+mysql = config(app)
 
 from restaurant import restaurant
-from delivery import delivery
 from customer import customer
+from delivery import delivery
+app.register_blueprint(restaurant)
 app.register_blueprint(customer)
 app.register_blueprint(delivery)
-app.register_blueprint(restaurant)
+
 
 @app.route('/')
 def index():
@@ -54,7 +47,7 @@ def login():
                 session['customer_ID'] = str(account['customer_ID'])
                 msg = 'Logged in successfully !'
                 flask.flash(msg)
-                return redirect(url_for("customer.dashboard"))
+                return redirect(url_for('customer.dashboard'))
             else:
                 msg = 'Incorrect username / password !'
         elif (authority == "Delivery Agent"):
@@ -83,7 +76,7 @@ def login():
                 msg = 'Incorrect username / password !'
         else:
             msg = 'Incorrect username / password !'
-            flask.flash(msg)
+        flask.flash(msg)
     return render_template('login.html', msg = msg)
 
 

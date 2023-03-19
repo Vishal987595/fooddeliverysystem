@@ -50,22 +50,33 @@
       {% for order in orders %}
       <div class="container mb-2">
       <div class="row g-0 bg-white border mb-3">
-        <div class="col-md-2 d-flex align-items-center">
+        <div class="col-md-3 d-flex align-items-center">
           <div class="d-flex justify-content-center rounded-circle overflow-hidden" style="width: 150px; height: 150px;">
             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Eq_it-na_pizza-margherita_sep2005_sml.jpg/800px-Eq_it-na_pizza-margherita_sep2005_sml.jpg" alt="Product Image" class="w-100 h-100">
           </div>
         </div>
         <div class="col-md-8">
           <div class="card-body">
-            <div class="d-flex justify-content-between align-items-start">
-              <div class="col-md-4">
+            <div class="d-flex justify-content-center align-items-start">
+              <div class="col-md-7">
                 <h5 class="card-title">Restaurant: {{order['rest_name']}}</h5>
                 <p class="card-text">Amount: {{order['price']}}</p>
               </div>
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <p class="card-text">Order time: {{order['time']}}</p>
                 <p class="card-text">Order status: {{order['status']}}</p>
               </div>
+              {% if order['status']=="delivered" %}
+              <form method="POST" action="{{url_for("customer.userprofile")}}">
+                  <div class="col-md-2">
+                <div><button class="btn btn-primary" name="order_ID" value="{{order['ID']}}">Delete</button></div> 
+                </div>  
+              </form>
+              {%else%}
+              <div class="col-md-2">
+                <div><span>In Progress</span></div> 
+              </div>
+              {%endif%}
             </div>
           </div>
         </div>

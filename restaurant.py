@@ -1,8 +1,9 @@
-from . import restaurant
-from app import mysql
-from flask import jsonify, render_template, session, flash, request, redirect, url_for
+from flask import jsonify, render_template, session, flash, request, redirect, url_for, Blueprint
 
-@restaurant.route('/restaurants', methods=["GET"])
+restaurant = Blueprint('restaurant', __name__)
+
+from app import mysql
+@restaurant.route('/restaurants', methods=['GET'])
 def get_restaurants():
     cursor = mysql.connection.cursor()
     cursor.execute('SELECT name FROM restaurant')
@@ -10,7 +11,7 @@ def get_restaurants():
     cursor.close()
     return jsonify(restaurants)
 
-@restaurant.route('/restdetail', methods=["GET"])
+@restaurant.route('/restdetail', methods=['GET'])
 def restdetail():
     ans = False
     try:
@@ -22,9 +23,19 @@ def restdetail():
         flash(msg)
         return render_template('restaurant/restdetail.html', rest_name=rest_name)
 
+
     cur = mysql.connection.cursor()
-    cur.execute("select name from restaurant where restaurant_ID=%s;",(rest_ID,))
-    rest_name = cur.fetchone()[0]
+    query = "select name, email, phone_number, rating from restaurant where restaurant_ID=%s;"
+    cur.execute(query,(rest_ID,))
+    rest_details = cur.fetchone()
+    rest = {
+        'name': rest_details[0],
+        'phone_number': rest_details[2],
+        'email': rest_details[1],
+        'rating': rest_details[3]
+    }
+    rest_name = rest['name']
+
     cur.execute("SELECT Orders.order_ID, Orders.order_placed_time, Orders.order_status, order_totals.net_price FROM Orders inner join restaurant on Orders.restaurant_ID = restaurant.restaurant_ID inner join ( SELECT Orders.order_ID, SUM(Menu_Item.unit_price * Order_Items.quantity) AS net_price FROM Orders JOIN Order_Items ON Orders.order_ID = Order_Items.order_ID JOIN Menu_Item ON Order_Items.item_ID = Menu_Item.item_ID GROUP BY Orders.order_ID ) order_totals on Orders.order_ID = order_totals.order_ID WHERE Orders.restaurant_ID = %s ORDER BY order_placed_time DESC LIMIT 10;", (rest_ID,))
     orders_rest = cur.fetchall()
     orders = []
@@ -46,11 +57,11 @@ def restdetail():
             items.append(it)
         temp['order_items'] = items
         orders.append(temp)
-    return render_template('restaurant/restdetail.html', rest_name=rest_name, orders=orders)
+    return render_template('restaurant/restdetail.html', rest=rest, rest_name=rest_name, orders=orders)
 
  
 
-@restaurant.route('/restmenu', methods=["GET", "POST"])
+@restaurant.route('/restmenu', methods=['GET', 'POST'])
 def restmenu():
     if (session['restbool']):
         rest_ID = session.get("restaurant_ID")
@@ -75,7 +86,7 @@ def restmenu():
     return render_template('restaurant/menu.html')
 
 
-@restaurant.route('/menuedit', methods=["GET", "POST"])
+@restaurant.route('/menuedit', methods=['GET', 'POST'])
 def menuedit():
     if request.method == 'GET':
         item_ID = request.values.get("item_ID")

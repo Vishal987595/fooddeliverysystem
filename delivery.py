@@ -1,8 +1,10 @@
-from . import delivery
-from app import mysql
-from flask import render_template, session, flash, redirect, url_for
+from flask import render_template, session, flash, redirect, url_for, Blueprint
 
-@delivery.route('/agentdetail', methods=["GET"])
+delivery = Blueprint('delivery', __name__)
+
+
+from app import mysql
+@delivery.route('/agentdetail', methods=['GET'])
 def agentdetail():
     ans = False
     try:
@@ -61,7 +63,5 @@ def agentdetail():
         temp['phone_number'] = cust_contact[0]
         delivery_order.append(temp)
 
-        
-    print(orders_rest)
     return render_template('delivery/agentdetail.html', address = delivery_order[0]['delivery_add'], agent_detail=agent_detail, delivery_order=delivery_order)
 

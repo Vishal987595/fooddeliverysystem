@@ -1,8 +1,9 @@
-from . import customer
-from flask import render_template, session, request, flash
-from app import mysql
+from flask import render_template, session, request, flash, Blueprint
 from datetime import datetime
 
+customer = Blueprint('customer', __name__)
+
+from app import mysql
 @customer.route('/users')
 def users():
     return 'Welcome users'
@@ -19,8 +20,16 @@ def dashboard():
         cuisines.append(p[2:-3])
     return render_template("customer/dashboard.html", cuisines=cuisines)
 
-@customer.route('/userprofile')
+@customer.route('/userprofile', methods=['GET', 'POST'])
 def userprofile():
+    if (request.method == 'POST'):
+        cursor = mysql.connection.cursor()
+        order_ID = request.form.get("order_ID")
+        sql = "DELETE FROM orders WHERE order_ID = %s"
+        val = (order_ID,)
+        cursor.execute(sql, val)
+        mysql.connection.commit()
+        cursor.close()
     ID = session['customer_ID']
     cursor = mysql.connection.cursor()
     cursor.execute("SELECT * FROM Customers WHERE customer_ID = %s", (ID,))
@@ -31,6 +40,7 @@ def userprofile():
         orders = []
         for placed_order in orders_by_cust:
             temp = {
+                    'ID': placed_order[0],
                     'rest_name': placed_order[3],
                     'time': placed_order[1].strftime('%Y-%m-%d %H:%M:%S'),
                     'status': placed_order[2],
@@ -105,7 +115,7 @@ def getmenu():
         return render_template('customer/menu.html', rest_name=rest_name, items=items)
     return render_template('customer/menu.html')
 
-@customer.route('/orderconfirmation', methods=['GET', 'POST'])
+@customer.route('/orderconfirmation', methods=["GET", "POST"])
 def orderconfirmation():
     if (request.method=="POST"):
         rest_ID = session["restaurant_order"]
@@ -145,6 +155,6 @@ def orderconfirmation():
         rest_name = cursor.fetchone()[0]
         cursor.close()
         flash("Order successfully submitted.")
-        return render_template("customer/orderconfirmation.html", total_price=total_price, items=order_items, rest_name=rest_name)
+        return render_template('customer/orderconfirmation.html', total_price=total_price, items=order_items, rest_name=rest_name)
 
-    return render_template("customer/menu.html")
+    return render_template('customer/menu.html')
