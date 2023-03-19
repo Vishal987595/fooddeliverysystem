@@ -29,9 +29,9 @@
       {% for item in items %}
       <tr>
         <td>{% if (item['veg_nonveg']) %}
-          <i class="fa-solid fa-leaf"></i>
+          <span style="color:green;padding:0 .3em">&#9679;&#8414;</span>
           {% else %}
-          <i class="fa-solid fa-drumstick-bite"></i>
+          <span style="color:red;padding:0 .3em">&#9679;&#8414;</span>
           {% endif %} 
         </td>
         <td>{{ item['availability'] }}</td>
@@ -41,7 +41,7 @@
         <td>
           <form method="GET" action="{{url_for('restaurant.menuedit')}}">
             <button type="Edit" class="btn" name="item_ID" value="{{item['ID']}}">
-              <i class="fa-regular fa-pen-to-square" name="m"></i>Edit
+              <i class="fa fa-pencil-square-o fa_custom" name="m"></i> Edit
             </button>
           </form>
         </td>

@@ -24,7 +24,6 @@
             <p class="card-text"><strong>Name:</strong> <sapn class="mr-2">{{agent_detail[1]}}</span> <sapn>{{agent_detail[2]}}</span> </p>
             <p class="card-text"><strong>Email:</strong> {{agent_detail[3]}}</p>
             <p class="card-text"><strong>Phone:</strong> {{agent_detail[4]}}</p>
-            <p class="card-text"><strong>Address:</strong> {{agent_detail[5]}}</p>
           </div>
         </div>
       </div>
@@ -41,31 +40,32 @@
             <thead>
                 <tr>
                 <th>Order ID</th>
-                <th>Customer Name</th>
-                <th>Address</th>
+                <th>Customer Phone number</th>
+                <th>Restaurant Adress</th>
+                <th>Delivery Address</th>
                 <th>Delivery Charge</th>
                 <th>Pickup Time</th>
                 <th>Delivery Time</th>
-                <th>Restaurant Adress</th>
+                <th>Current Order Status</th>
                 <th>Order Status</th>
-                
                 </tr>
             </thead>
             <tbody>
+              {% for delivery in delivery_order %}
                 <tr>
-                <td>001</td>
-                <td>Jane Doe</td>
-                <td>456 Elm St, Anytown USA</td>
-                <td>$25.00</td>
-                <td>3:00pm</td>
-                <td>3:00pm</td>
-                <td>3:00pm</td>
+                <td>{{delivery['order_ID']}}</td>
+                <td>{{delivery['phone_number']}}</td>
+                <td>{{delivery['rest_add']}}</td>
+                <td>{{delivery['delivery_add']}}</td>
+                <td>{{delivery['delivery_charge']}}</td>
+                <td>{{delivery['pickup_time']}}</td>
+                <td>{{delivery['delivery_time']}}</td>
+                <td>{{delivery['order_status']}}</td>
                 <td>
                     <form method="GET" class="d-flex flex-row">
                         <div class="mb-3">
                             <select id="authority" name="delivery_satus" class="form-select">
                             <option>delivered</option>
-                            <option>placed</option>
                             <option>picked</option>
                         </select>
                         </div>
@@ -73,7 +73,7 @@
                     </form> 
                 </td>
                 </tr>
-                
+              {% endfor %}
             </tbody>
             </table>
         </div>

@@ -58,7 +58,7 @@ def restmenu():
         cursor.execute("select name from restaurant where restaurant_ID = %s;", [rest_ID])
         rest = cursor.fetchone()
         rest_name = rest[0]
-        cursor.execute("select name, unit_price, veg, item_type, item_ID from menu_item where restaurant_ID = %s;", [rest_ID])
+        cursor.execute("select name, unit_price, veg, item_type, item_ID, availability from menu_item where restaurant_ID = %s;", [rest_ID])
         menu_items = cursor.fetchall()
         items = []
         for item in menu_items:
@@ -67,7 +67,8 @@ def restmenu():
                 'unit_price': item[1],
                 'veg_nonveg': int(item[2]),
                 'type': item[3],
-                'ID': item[4]
+                'ID': item[4],
+                'availability': "YES" if (int(item[5])) else "NO"
             }
             items.append(temp)
         return render_template('restaurant/menu.html', rest_name=rest_name, items=items)
@@ -77,26 +78,30 @@ def restmenu():
 @restaurant.route('/menuedit', methods=["GET", "POST"])
 def menuedit():
     if request.method == 'GET':
-        item_ID = session.get("item_ID")
+        item_ID = request.values.get("item_ID")
         cur = mysql.connection.cursor()
-        cur.execute("select item_ID veg, availability, name, unit_price, item_type from menu_item where item_ID = %s;", [item_ID])
-        item = cur.fetchall()
-        cur.close()
-        print("hello")
-        print(item)
+        cur.execute("select item_ID, veg, availability, name, unit_price, item_type from menu_item where item_ID = %s;", [item_ID])
+        item_detail = cur.fetchone()
+        item = {
+            'ID': item_detail[0],
+            'veg': item_detail[1],
+            'availability': item_detail[2],
+            'name': item_detail[3],
+            'unit_price': item_detail[4],
+            'item_type': item_detail[5]
+        }
         return render_template('restaurant/editmenu.html', item = item) 
-    
     if request.method == 'POST':
-        # item_ID = it_ID
-        veg_novveg = session.get("veg")
-        availability = session.get("availability")
-        item_name = session.get("name")
-        unit_price = session.get("unit_price")
-        item_type = session.get("item_type")
+        item_ID = request.values.get("item_ID")
+        veg_novveg = request.values.get("veg")
+        availability = request.values.get("availability")
+        item_name = request.values.get("name")
+        unit_price = request.values.get("unit_price")
+        item_type = request.values.get("item_type")
         cur = mysql.connection.cursor()
-        
-        cur.execute("UPDATE menu_item SET veg = {{veg_novveg}}, availability = {{availability}}, name={{name}}, unit_price = {{unit_price}}, item_type={{item_type}} where item_ID = %s;", [item_ID])
-        
-        print(item_name)
+        cur.execute("UPDATE menu_item SET veg = %s, availability=%s, name=%s, unit_price =%s, item_type=%s where item_ID = %s;", (veg_novveg, availability, item_name, unit_price, item_type, item_ID,))
+        mysql.connection.commit()
+        cur.close()
         return redirect(url_for('restaurant.restmenu'))
+    redirect(url_for('restaurant/retmenu'))
 
