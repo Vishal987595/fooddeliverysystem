@@ -18,23 +18,33 @@
     <thead>
       <tr>
         <th>Veg/Non-veg</th>
+        <th>Availability</th>
         <th>Item Name</th>
         <th>Unit Price</th>
         <th>Type</th>
+        <th>Edit</th> 
       </tr>
     </thead>
     <tbody>
       {% for item in items %}
       <tr>
         <td>{% if (item['veg_nonveg']) %}
-          <span style="color:green;padding:0 .3em">&#9679;&#8414;</span>
+          <i class="fa-solid fa-leaf"></i>
           {% else %}
-          <span style="color:red;padding:0 .3em">&#9679;&#8414;</span>
+          <i class="fa-solid fa-drumstick-bite"></i>
           {% endif %} 
         </td>
+        <td>{{ item['availability'] }}</td>
         <td>{{ item['name'] }}</td>
         <td>{{ item['unit_price'] }}</td>
         <td>{{ item['type'] }}</td>
+        <td>
+          <form method="GET" action="{{url_for('restaurant.menuedit')}}">
+            <button type="Edit" class="btn" name="item_ID" value="{{item['ID']}}">
+              <i class="fa-regular fa-pen-to-square" name="m"></i>Edit
+            </button>
+          </form>
+        </td>
       </tr>
       {% endfor %}
     </tbody>

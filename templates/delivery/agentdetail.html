@@ -21,10 +21,10 @@
             <h4 class="card-title mb-0">Agent Details</h4>
           </div>
           <div class="card-body">
-            <p class="card-text"><strong>Name:</strong> John Doe</p>
-            <p class="card-text"><strong>Email:</strong> john.doe@example.com</p>
-            <p class="card-text"><strong>Phone:</strong> 555-1234</p>
-            <p class="card-text"><strong>Address:</strong> 123 Main St, Anytown USA</p>
+            <p class="card-text"><strong>Name:</strong> <sapn class="mr-2">{{agent_detail[1]}}</span> <sapn>{{agent_detail[2]}}</span> </p>
+            <p class="card-text"><strong>Email:</strong> {{agent_detail[3]}}</p>
+            <p class="card-text"><strong>Phone:</strong> {{agent_detail[4]}}</p>
+            <p class="card-text"><strong>Address:</strong> {{agent_detail[5]}}</p>
           </div>
         </div>
       </div>
@@ -61,16 +61,15 @@
                 <td>3:00pm</td>
                 <td>3:00pm</td>
                 <td>
-                    <form class="d-flex flex-row">
+                    <form method="GET" class="d-flex flex-row">
                         <div class="mb-3">
-                            <label for="authority" class="form-label">User authority</label>
-                            <select id="authority" name="authority" class="form-select">
-                            <option>Customer</option>
-                            <option>Restaurant</option>
-                            <option>Delivery Agent</option>
+                            <select id="authority" name="delivery_satus" class="form-select">
+                            <option>delivered</option>
+                            <option>placed</option>
+                            <option>picked</option>
                         </select>
                         </div>
-                        <button type="submit"  class="btn btn-primary" value="signin">Submit</button>
+                        <button type="submit" class="btn btn-primary" name="delivery_satus" value="delivered">Submit</button>
                     </form> 
                 </td>
                 </tr>

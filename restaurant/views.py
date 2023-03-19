@@ -1,6 +1,6 @@
 from . import restaurant
 from app import mysql
-from flask import jsonify, render_template, session, flash
+from flask import jsonify, render_template, session, flash, request, redirect, url_for
 
 @restaurant.route('/restaurants', methods=["GET"])
 def get_restaurants():
@@ -48,6 +48,8 @@ def restdetail():
         orders.append(temp)
     return render_template('restaurant/restdetail.html', rest_name=rest_name, orders=orders)
 
+ 
+
 @restaurant.route('/restmenu', methods=["GET", "POST"])
 def restmenu():
     if (session['restbool']):
@@ -70,4 +72,31 @@ def restmenu():
             items.append(temp)
         return render_template('restaurant/menu.html', rest_name=rest_name, items=items)
     return render_template('restaurant/menu.html')
+
+
+@restaurant.route('/menuedit', methods=["GET", "POST"])
+def menuedit():
+    if request.method == 'GET':
+        item_ID = session.get("item_ID")
+        cur = mysql.connection.cursor()
+        cur.execute("select item_ID veg, availability, name, unit_price, item_type from menu_item where item_ID = %s;", [item_ID])
+        item = cur.fetchall()
+        cur.close()
+        print("hello")
+        print(item)
+        return render_template('restaurant/editmenu.html', item = item) 
+    
+    if request.method == 'POST':
+        # item_ID = it_ID
+        veg_novveg = session.get("veg")
+        availability = session.get("availability")
+        item_name = session.get("name")
+        unit_price = session.get("unit_price")
+        item_type = session.get("item_type")
+        cur = mysql.connection.cursor()
+        
+        cur.execute("UPDATE menu_item SET veg = {{veg_novveg}}, availability = {{availability}}, name={{name}}, unit_price = {{unit_price}}, item_type={{item_type}} where item_ID = %s;", [item_ID])
+        
+        print(item_name)
+        return redirect(url_for('restaurant.restmenu'))
 
