@@ -7,11 +7,11 @@
             <h2>Edit Menu Item</h2>
             <form action="{{url_for('restaurant.menuedit')}}" method="POST">
                 <div class="form-group">
-                    <label for="item-name">Veg/Nonveg:</label>
+                    <label for="item-name">Veg/Nonveg: veg=1 and nonveg=0</label>
                     <input type="text" class="form-control" id="item-name" name="veg" value="{{item['veg']}}" placeholder="{{item['veg']}}">
                 </div>
                 <div class="form-group">
-                    <label for="item-description">Availability:</label>
+                    <label for="item-description">Availability: 1/0 </label>
                     <input type="text" class="form-control" id="item-name" name="availability" value="{{item['availability']}}" placeholder="{{item['availability']}}">
                 </div>
                 <div class="form-group">
@@ -26,10 +26,6 @@
                     <label for="item-type">Type:</label>
                     <input type="text" class="form-control" id="item-type" name="item_type" value="{{item['item_type']}}" placeholder="{{item['item_type']}}">
                 </div>
-                <!--<div class="form-group form-check">
-                    <input type="checkbox" class="form-check-input" id="item-availability" name="item-availability" checked>
-                    <label class="form-check-label" for="item-availability">Available</label>
-                </div> -->
                 <button type="submit" class="btn btn-primary"  name="item_ID" value="{{item['ID']}}">Save Changes</button>
             </form>
         </div>

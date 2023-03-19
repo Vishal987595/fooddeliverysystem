@@ -13,7 +13,7 @@ def get_restaurants():
 
 @restaurant.route('/restdetail', methods=['GET'])
 def restdetail():
-    ans = False
+    rest_name = False
     try:
         ans = session['restbool']
         rest_ID = session['restaurant_ID']
@@ -22,7 +22,6 @@ def restdetail():
         msg = "Need to login as restaurant"
         flash(msg)
         return render_template('restaurant/restdetail.html', rest_name=rest_name)
-
 
     cur = mysql.connection.cursor()
     query = "select name, email, phone_number, rating from restaurant where restaurant_ID=%s;"
@@ -63,6 +62,7 @@ def restdetail():
 
 @restaurant.route('/restmenu', methods=['GET', 'POST'])
 def restmenu():
+    # adding add new menu bottom
     if (session['restbool']):
         rest_ID = session.get("restaurant_ID")
         cursor = mysql.connection.cursor()
@@ -82,13 +82,31 @@ def restmenu():
                 'availability': "YES" if (int(item[5])) else "NO"
             }
             items.append(temp)
-        return render_template('restaurant/menu.html', rest_name=rest_name, items=items)
+        return render_template('restaurant/menu.html', rest_name=rest_name, items=items, rest_ID=rest_ID)
     return render_template('restaurant/menu.html')
 
 
 @restaurant.route('/menuedit', methods=['GET', 'POST'])
 def menuedit():
     if request.method == 'GET':
+        if (request.values.get("newitem_ID")):
+            rest_ID = request.values.get("newitem_ID")
+            cur = mysql.connection.cursor()
+            cur.execute("select max(item_ID) from menu_item")
+            item_ID = cur.fetchone()[0]
+            item = {
+                'ID': str(int(item_ID) + 1),
+                'veg': 0,
+                'availability': 0,
+                'name': "name",
+                "unit_price": "0.00",
+                "item_type": "type"
+            }
+            cur.execute("insert into menu_item(item_ID, name, unit_price, availability, veg, item_type, restaurant_ID) values(%s,%s,%s,%s,%s,%s,%s);", (item['ID'], item['name'], item['unit_price'], item['availability'], item['veg'], item['item_type'], rest_ID,))
+            mysql.connection.commit()
+            cur.close()
+            return render_template('restaurant/editmenu.html', item=item)
+        
         item_ID = request.values.get("item_ID")
         cur = mysql.connection.cursor()
         cur.execute("select item_ID, veg, availability, name, unit_price, item_type from menu_item where item_ID = %s;", [item_ID])
@@ -113,6 +131,8 @@ def menuedit():
         cur.execute("UPDATE menu_item SET veg = %s, availability=%s, name=%s, unit_price =%s, item_type=%s where item_ID = %s;", (veg_novveg, availability, item_name, unit_price, item_type, item_ID,))
         mysql.connection.commit()
         cur.close()
+        msg = "Edited menu successfully!!"
+        flash(msg)
         return redirect(url_for('restaurant.restmenu'))
-    redirect(url_for('restaurant/retmenu'))
+    redirect(url_for('restaurant.restmenu'))
 

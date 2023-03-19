@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+f<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -9,15 +9,29 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
+  <!-- showing fash massege after login sucessfully  -->
+  {% with messages = get_flashed_messages() %} {% if messages %} 
+  {% for message in messages %}
+    <div class="alert alert-success text-center" role="alert" id="flash-message">
+      <div>{{ message }}</div>
+    </div>
+  {% endfor %} 
+  {% endif %}{%endwith%}
 
+  <!-- Page Content  -->
   <div class="container">
-    <h1 class="mt-5 text-center">Delivery Agent Page</h1>
+    <form method="GET" action="{{url_for('home')}}">
+      <div class="position-sticky">
+        <button class="btn btn-primary">Sign Out</button>
+      </div>
+    </form>
+    <h1 class="mt-0 text-center">Delivery Agent Page</h1>
     <hr>
     <!-- Agent Details Section -->
     <div class="row">
-      <div class="col-md-4">
+      <div class="col-md-4 ">
         <div class="card">
-          <div class="card-header">
+          <div class="card-header text-center">
             <h4 class="card-title mb-0">Agent Details</h4>
           </div>
           <div class="card-body">
@@ -28,8 +42,8 @@
         </div>
       </div>
     </div>
+    
     <!-- Orders Section -->
-
     <div class="container">
         <br>
         <h2 class="text-center mb-3 ">Orders</h2>
@@ -46,7 +60,6 @@
                 <th>Pickup Time</th>
                 <th>Delivery Time</th>
                 <th>Current Order Status</th>
-                <th>Order Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -60,17 +73,6 @@
                 <td>{{delivery['pickup_time']}}</td>
                 <td>{{delivery['delivery_time']}}</td>
                 <td>{{delivery['order_status']}}</td>
-                <td>
-                    <form method="GET" class="d-flex flex-row">
-                        <div class="mb-3">
-                            <select id="authority" name="delivery_satus" class="form-select">
-                            <option>delivered</option>
-                            <option>picked</option>
-                        </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary" name="delivery_satus" value="delivered">Submit</button>
-                    </form> 
-                </td>
                 </tr>
               {% endfor %}
             </tbody>

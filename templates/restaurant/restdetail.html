@@ -4,7 +4,12 @@
     background-color: #d9d9d9;
   }
 </style>
-
+{% with messages = get_flashed_messages() %} {% if messages %} {% for message in
+  messages %}
+  <div class="alert alert-primary text-center" role="alert" id="flash-message">
+    <div>{{ message }}</div>
+  </div>
+  {% endfor %} {% endif %} {% endwith %}
 <section class="pb-24 position-relative overflow-hidden">
   <div class="container">
     <div class="row mt-12">

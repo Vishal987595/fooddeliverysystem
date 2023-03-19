@@ -28,7 +28,6 @@ def agentdetail():
     orders_rest = cur.fetchall()
     delivery_order = []
     for detail in orders_rest:
-        print(detail)
         temp = {
             'order_ID': detail[0],
             'order_status': detail[1],
