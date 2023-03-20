@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% with messages = get_flashed_messages() %} {% if messages %} {% for message in
+  messages %}
+  <div class="alert alert-primary text-center" role="alert" id="flash-message">
+    <div>{{ message }}</div>
+  </div>
+  {% endfor %} {% endif %} {% endwith %}
     <style>
       body {
         background-color: #f8f9fa;
@@ -59,22 +65,22 @@
               <form method="POST">
                 <div class="mb-3">
                     <label for="name" class="form-label">Restaurant name</label>
-                    <input type="text" class="form-control" name='name' id="name" placeholder="Restaurant name">
+                    <input required type="text" class="form-control" name='name' id="name" placeholder="Restaurant name">
                   </div>
                 <div class="mb-3">
                   <label for="email" class="form-label">Email address</label>
-                  <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+                  <input required type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter email">
                 </div>
                 <div class="mb-3">
                   <label for="Phone number" class="form-label">Phone number</label>
-                  <input type="tel" class="form-control" name="Phone number" id="Phone number" aria-describedby="PhoneHelp" placeholder="Enter Phone number">
+                  <input required type="tel" class="form-control" name="Phone number" id="Phone number" aria-describedby="PhoneHelp" placeholder="Enter Phone number">
                 </div>
                 <div class="mb-3">
                   <label for="password" class="form-label">Password</label>
-                  <input type="password" class="form-control"name="password" id="password" placeholder="Password">
+                  <input required type="password" class="form-control"name="password" id="password" placeholder="Password">
                 </div>
                 <div class="text-center">
-                  <button type="submit" class="btn btnsame">Submit</button>
+                  <button required type="submit" class="btn btnsame">Submit</button>
                 </div>
               </form>
             </div>

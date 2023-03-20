@@ -95,10 +95,14 @@ def signupcustomer():
         cur.execute("select max(customer_ID) from customers")
         ID = cur.fetchone()
         ID = str(int(ID[0]) + 1)
-        cur.execute("insert into customers(customer_ID, first_name, last_name, email, phone_no, password, DOB) values(%s, %s, %s, %s, %s , %s, %s)", (ID, firstname, lastname, email, phone_number, password, DOB))
+        try:
+            cur.execute("insert into customers(customer_ID, first_name, last_name, email, phone_no, password, DOB) values(%s, %s, %s, %s, %s , %s, %s)", (ID, firstname, lastname, email, phone_number, password, DOB))
+        except:
+            flask.flash(msg)
+            return render_template('customersignup.html')
         mysql.connection.commit()
         cur.close()
-        msg = 'CUSTOMER: sigup successfully!!'
+        msg = 'CUSTOMER: signup successfully!!'
         flask.flash(msg)
         return redirect(url_for('login'))
     return render_template('customersignup.html')
@@ -119,10 +123,14 @@ def signuprestaurant():
         cur.execute('select max(restaurant_ID) from restaurant')
         ID = cur.fetchone()
         ID = str(int(ID[0]) + 1)
-        cur.execute('insert into restaurant(restaurant_ID, name, email, phone_number, rest_address, password) values(%s, %s, %s, %s, %s, %s)', (ID, name, email, phoneno, rest_address, password))
+        try:
+            cur.execute('insert into restaurant(restaurant_ID, name, email, phone_number, rest_address, password) values(%s, %s, %s, %s, %s, %s)', (ID, name, email, phoneno, rest_address, password))
+        except:
+            flask.flash(msg)
+            return render_template('restaurantsignup.html')
         mysql.connection.commit()
         cur.close()
-        msg = 'RESTAURANT sigup successfully!!'
+        msg = 'RESTAURANT signup successfully!!'
         flask.flash(msg)
         return redirect(url_for('login'))
     return render_template('restaurantsignup.html')
@@ -136,10 +144,14 @@ def signupdeliveryagent():
         cur.execute('select max(agent_ID) from delivery_agent;')
         ID = cur.fetchone()
         ID = str(int(ID[0]) + 1)
-        cur.execute('insert into delivery_agent(agent_ID, first_name, middle_name, last_name, phone_no, email, DOB, password) values(%s, %s, %s, %s, %s, %s, %s, %s)', (ID, agentdetail['firstName'], agentdetail['MiddleName'], agentdetail['lastName'], agentdetail['Phone number'], agentdetail['email'], agentdetail['DOB'], agentdetail['password']))
+        try:
+            cur.execute('insert into delivery_agent(agent_ID, first_name, middle_name, last_name, phone_no, email, DOB, password) values(%s, %s, %s, %s, %s, %s, %s, %s)', (ID, agentdetail['firstName'], agentdetail['MiddleName'], agentdetail['lastName'], agentdetail['Phone number'], agentdetail['email'], agentdetail['DOB'], agentdetail['password']))
+        except:
+            flask.flash(msg)
+            return render_template('deliveryagentsignup.html')
         mysql.connection.commit()
         cur.close()
-        msg = 'AGENT sigup successfully!!'
+        msg = 'AGENT signup successfully!!'
         flask.flash(msg)
         return redirect(url_for('login'))
     return render_template('deliveryagentsignup.html')

@@ -30,7 +30,7 @@
   .btn:hover {
     background-color: #ffffff;
     border-color: #23272b;
-    color:#000000
+    color:#000000;
     font-weight: bold;
   }
 
@@ -46,10 +46,10 @@
 </style>
 {% with messages = get_flashed_messages() %} {% if messages %} {% for message in
 messages %}
-<div class="alert alert-danger text-center" role="alert" id="flash-message">
+<div class="alert alert-primary text-center" role="alert" id="flash-message">
   <div>{{ message }}</div>
 </div>
-{% endfor %} {% endif %} {% endwith %}
+{% endfor %} {% endif %} {% endwith %}
 <div class="container">
   <div class="row">
     <div class="col-md-4 offset-md-4">
