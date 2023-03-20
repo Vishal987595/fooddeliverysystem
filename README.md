@@ -1,5 +1,5 @@
 # Food Delivery website
-Video_link: https://drive.google.com/file/d/1BrPiArpvNygDpygwt5aaDxWbDvjJVzE1/view?usp=sharing
+Video_link: https://drive.google.com/file/d/1BrPiArpvNygDpygwt5aaDxWbDvjJVzE1/view?usp=sharing \
 We have developed a food delivery website that allows users to log in or sign up as customers, restaurants, or delivery agents. To launch the website, please follow the steps below.
 1. Clone this repository.
 2. Run the Food_Delivery.sql file in your sql workbench.
