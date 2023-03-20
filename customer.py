@@ -129,7 +129,11 @@ def orderconfirmation():
         order_ID = str(int(order_ID[0]) + 1)
 
         order_status = "placed"
-        customer_ID = session["customer_ID"]
+        try:
+            customer_ID = session["customer_ID"]
+        except:
+            flash("Need to login as customer")
+            return redirect(url_for('login'))
         now = datetime.now()
         order_placed_time = now.strftime('%Y-%m-%d %H:%M:%S')
 
