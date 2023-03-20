@@ -34,7 +34,7 @@
     .btn:hover {
         background-color: #ffffff;
         border-color: #23272b;
-        color:#000000
+        color:#000000;
         font-weight: bold;
     }
 </style>
@@ -114,19 +114,19 @@
                 <table class="table table-bordered table-striped">
                 <thead class="thead-dark">
                     <tr>
-                    <th>{{table['roll_number']}}</th>
-                    <th>{{table['first_name']}}</th>
-                    <th>{{table['last_name']}}</th>
-                    <th>{{table['emailid']}}</th>
+                    <th>{{table['col1']}}</th>
+                    <th>{{table['col2']}}</th>
+                    <th>{{table['col3']}}</th>
+                    <th>{{table['col4']}}</th>
                     </tr>
                 </thead>
                 <tbody>
                 {% for student in student_details %}
                     <tr>
-                    <td>{{student['roll_number']}}</td>
-                    <td>{{student['first_name']}}</td>
-                    <td>{{student['last_name']}}</td>
-                    <td>{{student['emailid']}}</td>
+                    <td>{{student['col1']}}</td>
+                    <td>{{student['col2']}}</td>
+                    <td>{{student['col3']}}</td>
+                    <td>{{student['col4']}}</td>
                     
                     </tr>
                 {% endfor %}
@@ -144,10 +144,10 @@
                     <div class="input-group mb-3">
                         <label class="input-group-text" for="inputGroupSelect01">Column to rename</label>
                         <select class="form-select" id="inputGroupSelect01" name="col_name">
-                            <option>{{table['roll_number']}}</option>
-                            <option>{{table['first_name']}}</option>
-                            <option>{{table['last_name']}}</option>
-                            <option>{{table['emailid']}}</option>
+                            <option>{{table['col1']}}</option>
+                            <option>{{table['col2']}}</option>
+                            <option>{{table['col3']}}</option>
+                            <option>{{table['col4']}}</option>
                         </select>
                     </div>
                 </div>

@@ -164,61 +164,33 @@ def aboutus():
     tablename = 'Team_details'  
     cur = mysql.connection.cursor()
     cur.execute(query, ("Team_details",))
-    col_name = cur.fetchall();
+    col_name = cur.fetchall()
 
     table ={
-        'roll_number':col_name[0][0],
-        'first_name':col_name[1][0],
-        'last_name':col_name[2][0],
-        'emailid':col_name[3][0],
+        'col1':col_name[0][0],
+        'col2':col_name[1][0],
+        'col3':col_name[2][0],
+        'col4':col_name[3][0],
     }
-
-    cur.execute("select * from Team_details")
-    students = cur.fetchall();
+    query = f"SELECT `{table['col1']}`, `{table['col2']}`, `{table['col3']}`, `{table['col4']}` FROM `team_details`;"
+    cur.execute(query)
+    students = cur.fetchall()
     student_details=[]
     for student in students:
         temp = {
-            'roll_number':student[0],
-            'first_name':student[1],
-            'last_name':student[2],
-            'emailid':student[3]
+            'col1':student[0],
+            'col2':student[1],
+            'col3':student[2],
+            'col4':student[3]
         }
         student_details.append(temp)
     
     return render_template('aboutus.html',tablename=tablename, table = table, student_details= student_details)
 
-
-
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('login'))
-
-@app.route('/register', methods =['GET', 'POST'])
-def register():
-    msg = ''
-    if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form :
-        username = request.form['username']
-        password = request.form['password']
-        email = request.form['email']
-        cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cursor.execute('SELECT * FROM accounts WHERE username = % s', (username, ))
-        account = cursor.fetchone()
-        if account:
-            msg = 'Account already exists !'
-        elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
-            msg = 'Invalid email address !'
-        elif not re.match(r'[A-Za-z0-9]+', username):
-            msg = 'Username must contain only characters and numbers !'
-        elif not username or not password or not email:
-            msg = 'Please fill out the form !'
-        else:
-            cursor.execute('INSERT INTO accounts VALUES (NULL, % s, % s, % s)', (username, password, email, ))
-            mysql.connection.commit()
-            msg = 'You have successfully registered !'
-    elif request.method == 'POST':
-        msg = 'Please fill out the form !'
-    return render_template('register.html', msg = msg)
 
 if __name__ == '__main__':
     app.run(debug=True)
