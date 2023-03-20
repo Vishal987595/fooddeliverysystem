@@ -3,13 +3,6 @@ from flask import jsonify, render_template, session, flash, request, redirect, u
 restaurant = Blueprint('restaurant', __name__)
 
 from app import mysql
-@restaurant.route('/restaurants', methods=['GET'])
-def get_restaurants():
-    cursor = mysql.connection.cursor()
-    cursor.execute('SELECT name FROM restaurant')
-    restaurants = cursor.fetchall()
-    cursor.close()
-    return jsonify(restaurants)
 
 @restaurant.route('/restdetail', methods=['GET'])
 def restdetail():

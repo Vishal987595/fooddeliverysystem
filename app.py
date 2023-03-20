@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, redirect, url_for, session
 import flask
 
 import MySQLdb.cursors
-import re
 
 app = Flask(__name__)
 from configure import config
