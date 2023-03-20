@@ -104,6 +104,9 @@ def menuedit():
         cur = mysql.connection.cursor()
         cur.execute("select item_ID, veg, availability, name, unit_price, item_type from menu_item where item_ID = %s;", [item_ID])
         item_detail = cur.fetchone()
+        if (item_detail is None):
+            flash("Need to login as Restaurant")
+            return redirect(url_for('login'))
         item = {
             'ID': item_detail[0],
             'veg': item_detail[1],
