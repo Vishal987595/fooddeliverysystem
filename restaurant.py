@@ -101,6 +101,7 @@ def menuedit():
             return render_template('restaurant/editmenu.html', item=item)
         
         item_ID = request.values.get("item_ID")
+        print(item_ID)
         cur = mysql.connection.cursor()
         cur.execute("select item_ID, veg, availability, name, unit_price, item_type from menu_item where item_ID = %s;", [item_ID])
         item_detail = cur.fetchone()

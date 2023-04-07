@@ -63,7 +63,7 @@
             </div>
             <div class="card-body">
               <form method="POST">
-                <div class="row mb-3">
+                <div class="row mb-1">
                   <div class="col">
                     <label for="firstName" class="form-label">First name</label>
                     <input required type="text" class="form-control" name="firstname" id="firstname" placeholder="First name">
@@ -73,24 +73,53 @@
                     <input required type="text" class="form-control" name = "lastname" id="lastName" placeholder="Last name">
                   </div>
                 </div>
-                <div class="mb-3">
+                <div class="mb-1">
                   <label for="DOB" class="form-label">DOB</label>
                   <input required type="date" class="form-control" name="DOB" id="DOB" aria-describedby="DOB" placeholder="Enter DOB">
                 </div>
-                <div class="mb-3">
+                <div class="mb-1">
                   <label for="email" class="form-label">Email address</label>
-                  <input required type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+                  <input required type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="example@gmail.com">
                 </div>
-                <div class="mb-3">
+                <div class="mb-1">
                   <label for="Phone number" class="form-label">Phone number</label>
                   <input required type="tel" class="form-control" name="phone_number" id="phone_number" aria-describedby="PhoneHelp" placeholder="Phone number">
                 </div>
-                <div class="mb-3">
+                
+                <!-- Adding address for assign 4  start-->
+                <div class="mb-0">
+                  <label >Address</label>
+                </div>
+                
+                <div class="row mb-1">
+                  <div class="col">
+                    <input type="text" class="form-control" name = "buildingnumber" id="restbuildingNumber" placeholder="Building Number">
+                  </div>
+                  <div class="col">
+                    <input type="text" class="form-control" name="streetname" id="reststreetNumber" placeholder="Street">
+                  </div>
+                  
+                </div>
+
+                <div class="row mb-1">
+                  <div class="col">
+                    <input required type="text" class="form-control" name = "cityname" id="cityName" placeholder="City name">
+                  </div>
+                  <div class="col">
+                    <input required type="text" class="form-control" name="statename" id="statename" placeholder="State Name">
+                  </div>
+                </div>
+                <div class="mb-1">
+                  <input required type="text" class="form-control" name ="pincode" id="pincode" placeholder="803110">
+                </div>
+                <!-- Adding address for assign 4  end-->
+
+                <div class="mb-1">
                   <label for="password" class="form-label">Password</label>
                   <input required type="password" class="form-control" name="password" id="password" placeholder="Password">
                 </div>
                 <div class="text-center">
-                  <button type="submit" class="btn btnsame">Submit</button>
+                  <button type="submit" class="btn btnsame mb-0">Submit</button>
                 </div>
               </form>
             </div>

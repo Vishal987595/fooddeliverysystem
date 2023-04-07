@@ -63,33 +63,63 @@
             </div>
             <div class="card-body">
               <form method="POST">
-                <div class="row mb-3">
+                <div class="row mb-1">
                   <div class="col">
                     <label for="firstName" class="form-label">First name</label>
                     <input required type="text" class="form-control" name="firstName" id="firstName" placeholder="First name">
                   </div>
                   <div class="col">
                     <label for="MiddleName" class="form-label">Middle name</label>
-                    <input required type="text" class="form-control" name="MiddleName" id="MiddleName" placeholder="Middle name">
+                    <input type="text" class="form-control" name="MiddleName" id="MiddleName" placeholder="Middle name">
                   </div>
                   <div class="col">
                     <label for="lastName" class="form-label">Last name</label>
                     <input required type="text" class="form-control" name="lastName" id="lastName" placeholder="Last name">
                   </div>
                 </div>
-                <div class="mb-3">
+                <div class="mb-1">
                   <label for="DOB" class="form-label">DOB</label>
                   <input required type="date" class="form-control" name="DOB" id="DOB"" aria-describedby="emailHelp" placeholder="Enter DOB">
                 </div>
-                <div class="mb-3">
-                  <label for="email" class="form-label">Email address</label>
-                  <input required type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter email">
-                </div>
-                <div class="mb-3">
-                  <label for="Phone number" class="form-label">Phone number</label>
+
+                <div class="row mb-1">
+                  <div class="col">
+                    <label for="email" class="form-label">Email address</label>
+                    <input required type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+                  </div>
+                  <div class="col">
+                    <label for="Phone number" class="form-label">Phone number</label>
                   <input required type="tel" class="form-control" name="Phone number" id="Phone number" aria-describedby="PhoneHelp" placeholder="Phone number">
+                  </div>
                 </div>
-                <div class="mb-3">
+
+                <!-- Adding address for assign 4  start-->
+                <div class="mb-0">
+                  <label >Address</label>
+                </div>
+                
+                <div class="row mb-1">
+                  <div class="col">
+                    <input type="text" class="form-control" name = "buildingnumber" id="restbuildingNumber" placeholder="Building Number">
+                  </div>
+                  <div class="col">
+                    <input type="text" class="form-control" name="streetname" id="reststreetNumber" placeholder="Street">
+                  </div>
+                </div>
+
+                <div class="row mb-1">
+                  <div class="col">
+                    <input required type="text" class="form-control" name = "cityname" id="cityName" placeholder="City name">
+                  </div>
+                  <div class="col">
+                    <input required type="text" class="form-control" name="statename" id="statename" placeholder="State Name">
+                  </div>
+                </div>
+                <div class="mb-1">
+                  <input required type="text" class="form-control" name ="pincode" id="pincode" placeholder="803110">
+                </div>
+                <!-- Adding address for assign 4  end-->
+                <div class="mb-1">
                   <label for="password" class="form-label">Password</label>
                   <input required type="password" class="form-control" name="password" id="password" placeholder="Password">
                 </div>
