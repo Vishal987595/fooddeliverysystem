@@ -17,21 +17,45 @@
         <div class="mw-2xl text-center mx-auto">
           {% if(rest_name ) %}
           <div class="row my-3">
-            <div class="col-md-8">
+            <div class="col-md-12">
               <div class="card">
                 <div class="card-header">
                   <h4 class="card-title mb-0">Restaurant Details</h4>
                 </div>
                 <div class="d-flex flex-row">
                   <div class="card-body col-md-6">
-                    <p class="card-text"><strong>Name:</strong> {{rest['name']}}</p>
-                    <p class="card-text"><strong>Phone Number:</strong>{{rest['phone_number']}} </p>
-                  </div>
-                  <div class="card-body col-md-6">
+                    <p class="card-text text-start"><strong>Name:</strong> {{rest['name']}}</p>
                     <p class="card-text"><strong>Email:</strong> {{rest['email']}}</p>
+                    <p class="card-text"><strong>Phone Number:</strong>{{rest['phone_number']}} </p>
                     <p class="card-text"><strong>Rating:</strong>{{rest['rating']}} </p>
                   </div>
+                  <div class="card-body col-md-6">
+                    <p class="card-text"><strong>Street Name:</strong>{{rest['phone_number']}} </p>
+                    <p class="card-text"><strong>City:</strong>{{rest['phone_number']}} </p>
+                    <p class="card-text"><strong>State:</strong> {{rest['phone_number']}}</p>
+                    <p class="card-text"><strong>Pin Code:</strong> {{rest['phone_number']}}</p>
+                  </div>
+                  <div class="card-body col-md-6">
+                    <p class="card-text"><strong>Weekday Opening Time:</strong> 5:00</p>
+                    <p class="card-text"><strong>Weekday Closing Time:</strong> 5:00</p>
+                    <p class="card-text"><strong>Weekend Opening Time:</strong> 5:00</p>
+                    <p class="card-text"><strong>Weekend Closing Time:</strong> 5:00</p>
+                    
+                  </div>
                 </div>
+                <div>
+                  <button id="edit-btn" type="button" class="btn btn-primary">Edit</button>
+                  <form id="edit-form" style="display:none">
+                    <br>
+                    <label for="address">Email:</label>
+                    <input type="text" id="email" name="email" >
+                    <br>
+                    <label for="phone">Phone Number:</label>
+                    <input type="phone_number" id="phone" name="phone" >
+                    <br>
+                    <!-- add more input fields here -->
+                    <input class="btn btn-primary mb-3" type="submit" value="Save Changes">
+                  </form>
               </div>
             </div>
           </div>
@@ -102,7 +126,23 @@
       {%endfor%}
     </div>
   </div>
-  
+
+  <script>
+      const editBtn = document.getElementById('edit-btn');
+      const editForm = document.getElementById('edit-form');
+      editBtn.addEventListener('click', () => {
+        editForm.style.display = 'block';
+      });
+      editForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        // handle form submission here
+        // you can use fetch() or XMLHttpRequest to send the updated data to the server
+        // or update the HTML table directly using JavaScript
+        // once the data is updated, hide the edit form again
+        editForm.style.display = 'none';
+      });
+    </script>
 </section>
+
 
 {% endblock content %}
