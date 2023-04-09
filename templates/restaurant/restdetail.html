@@ -76,9 +76,18 @@
 
 <section>
   <div class="container w-full bg-white pb-3">
-    <div class="text-center p-2"><h4 class="fw-bold">Your Delieveries</h4></div>
-
-    
+     <!-- Givign option to selce the time show a Delieveries -->
+    <div class="d-flex p-4 flex-column align-items-center justify-content-center">
+      <div>
+        <select class="form-select form-select-lg mb-3 px-4 py-2" aria-label=".form-select-lg example">
+          <option selected>Orders of duration?</option>
+          <option value="1">Today</option>
+          <option value="2">Last Week</option>
+          <option value="3">All</option>
+        </select>
+      </div>
+      <div><h4 class="fw-bold">Your <span>All</span> Delieveries</h4></div>
+    </div>
       {%for order in orders %}
       <div class="card bg-light mb-5">
         <div class="shadow-sm container">
@@ -116,6 +125,10 @@
                     <p class="card-text"><span class="fw-bold"> Total price:</span> {{order["net_price"]}}</p>
                     <p class="card-text"><span class="fw-bold"> Order time:</span> {{order["order_placed_time"]}}</p>
                     <p class="card-text"><span class="fw-bold"> Order status:</span> {{order["order_status"]}}</p>
+                     <!-- Upadating delivery status for assign 4 -->
+                    {%if order["order_status"] == "delivered"%}
+                    <button type="submit" class="btn btn-primary">Ready</button>
+                    {%endif%}
                   </div>
                 </div>
               </div>

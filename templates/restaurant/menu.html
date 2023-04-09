@@ -16,7 +16,7 @@
   {% endfor %} 
   {% endif %}{%endwith%}
 <div class="container mb-5">
-  <form method="GET" action="{{url_for('restaurant.menuedit')}}"">
+  <form method="GET" action="{{url_for('restaurant.menuedit')}}">
   <div class="position-relative">
     <div class="position-absolute top-50 start-0 translate-middle">
       <button type="submit" class="btn btn-primary " name="newitem_ID" value="{{rest_ID}}">Add New Menu</button>
