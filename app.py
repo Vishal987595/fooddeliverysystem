@@ -63,6 +63,7 @@ def login():
                 msg = 'Incorrect username / password !'
         elif (authority == "Restaurant"):
             cursor.execute("SELECT * FROM restaurant WHERE email = % s AND password = % s", (useremail, password, ))
+            # cursor.execute(f"SELECT * FROM restaurant WHERE email='{useremail}' AND password='{password}'")
             account = cursor.fetchone()
             if account:
                 session['restbool'] = True
@@ -79,7 +80,7 @@ def login():
     return render_template('login.html', msg = msg)
 
 
-# making rout for sign up for all three types of users
+# making routes for sign up for all three types of users
 @app.route('/signupcustomer',methods=['GET', 'POST'])
 def signupcustomer():
     if request.method == 'POST':
@@ -91,12 +92,29 @@ def signupcustomer():
         DOB = userdetails['DOB']
         phone_number = userdetails['phone_number']
         password = userdetails['password']
+        building_name = userdetails['building_name']
+        street_name = userdetails['street_name']
+        city = userdetails['cityname']
+        state = userdetails['statename']
+        pin_code = userdetails['pincode']
         cur = mysql.connection.cursor()
         cur.execute("select max(customer_ID) from customers")
         ID = cur.fetchone()
         ID = str(int(ID[0]) + 1)
+        cur.execute("select address_ID from address where building_name=%s and street_name=%s and pin_code=%s and city=%s and state=%s", (building_name, street_name, pin_code, city, state))
+        address_ID = cur.fetchone()
         try:
+            if (address_ID == None):
+                cur.execute("select max(address_ID) from address")
+                address_ID = cur.fetchone()
+                address_ID = str(int(address_ID[0]) + 1)
+                cur.execute("insert into address(address_ID, building_name, street_name, pin_code, city, state) values(%s, %s, %s, %s, %s, %s)", (address_ID, building_name, street_name, pin_code, city, state))
+                mysql.connection.commit()
+            else:
+                address_ID = address_ID[0]
             cur.execute("insert into customers(customer_ID, first_name, last_name, email, phone_no, password, DOB) values(%s, %s, %s, %s, %s , %s, %s)", (ID, firstname, lastname, email, phone_number, password, DOB))
+            cur.execute("insert into customer_address(customer_ID, address_ID) values(%s, %s);", (ID, address_ID,))
+            mysql.connection.commit()
         except:
             flask.flash(msg)
             return render_template('customersignup.html')
@@ -118,13 +136,27 @@ def signuprestaurant():
         password = restdetail['password']
         # Keeping weekend_time and weekday_time as null values
         # For now keeping rest_address from our side
-        rest_address = str(3)
         cur = mysql.connection.cursor()
         cur.execute('select max(restaurant_ID) from restaurant')
         ID = cur.fetchone()
         ID = str(int(ID[0]) + 1)
+        building_name = restdetail['buildingnumber']
+        street_name = restdetail['streetname']
+        city = restdetail['cityname']
+        state = restdetail['statename']
+        pin_code = restdetail['pincode']
+        cur.execute("select address_ID from address where building_name=%s and street_name=%s and pin_code=%s and city=%s and state=%s", (building_name, street_name, pin_code, city, state))
+        address_ID = cur.fetchone()
         try:
-            cur.execute('insert into restaurant(restaurant_ID, name, email, phone_number, rest_address, password) values(%s, %s, %s, %s, %s, %s)', (ID, name, email, phoneno, rest_address, password))
+            if (address_ID == None):
+                cur.execute("select max(address_ID) from address")
+                address_ID = cur.fetchone()
+                rest_address = str(int(address_ID[0]) + 1)
+                cur.execute("insert into address(address_ID, building_name, street_name, pin_code, city, state) values(%s, %s, %s, %s, %s, %s)", (rest_address, building_name, street_name, pin_code, city, state))
+                mysql.connection.commit()
+            else:
+                rest_address = address_ID[0]
+            cur.execute('insert into restaurant(restaurant_ID, name, email, phone_number, rest_address, password, weekday_time, weekend_time) values(%s, %s, %s, %s, %s, %s, 7, 8)', (ID, name, email, phoneno, rest_address, password))
         except:
             flask.flash(msg)
             return render_template('restaurantsignup.html')
@@ -144,8 +176,24 @@ def signupdeliveryagent():
         cur.execute('select max(agent_ID) from delivery_agent;')
         ID = cur.fetchone()
         ID = str(int(ID[0]) + 1)
+        building_name = agentdetail['buildingnumber']
+        street_name = agentdetail['streetname']
+        city = agentdetail['cityname']
+        state = agentdetail['statename']
+        pin_code = agentdetail['pincode']
+        cur.execute("select address_ID from address where building_name=%s and street_name=%s and pin_code=%s and city=%s and state=%s", (building_name, street_name, pin_code, city, state))
+        address_ID = cur.fetchone()
         try:
-            cur.execute('insert into delivery_agent(agent_ID, first_name, middle_name, last_name, phone_no, email, DOB, password) values(%s, %s, %s, %s, %s, %s, %s, %s)', (ID, agentdetail['firstName'], agentdetail['MiddleName'], agentdetail['lastName'], agentdetail['Phone number'], agentdetail['email'], agentdetail['DOB'], agentdetail['password']))
+            if (address_ID == None):
+                cur.execute("select max(address_ID) from address")
+                address_ID = cur.fetchone()
+                address_ID = str(int(address_ID[0]) + 1)
+                cur.execute("insert into address(address_ID, building_name, street_name, pin_code, city, state) values(%s, %s, %s, %s, %s, %s)", (address_ID, building_name, street_name, pin_code, city, state))
+                mysql.connection.commit()
+            else:
+                address_ID = address_ID[0]
+            cur.execute('insert into delivery_agent(agent_ID, first_name, middle_name, last_name, phone_no, email, DOB, password, address_ID) values(%s, %s, %s, %s, %s, %s, %s, %s, %s)', (ID, agentdetail['firstName'], agentdetail['MiddleName'], agentdetail['lastName'], agentdetail['Phone number'], agentdetail['email'], agentdetail['DOB'], agentdetail['password'], address_ID))
+            mysql.connection.commit()
         except:
             flask.flash(msg)
             return render_template('deliveryagentsignup.html')

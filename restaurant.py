@@ -17,15 +17,37 @@ def restdetail():
         return render_template('restaurant/restdetail.html', rest_name=rest_name)
 
     cur = mysql.connection.cursor()
-    query = "select name, email, phone_number, rating from restaurant where restaurant_ID=%s;"
+    query = "select name, email, phone_number, rating, weekend_time, weekday_time, rest_address from restaurant where restaurant_ID=%s;"
     cur.execute(query,(rest_ID,))
     rest_details = cur.fetchone()
+    cur.execute("select street_name, city, state, pin_code from address where address_ID=%s", (rest_details[6],))
+    rest_address = cur.fetchone()
     rest = {
         'name': rest_details[0],
-        'phone_number': rest_details[2],
         'email': rest_details[1],
-        'rating': rest_details[3]
+        'phone_number': rest_details[2],
+        'rating': rest_details[3],
+        'street_name': rest_address[0],
+        'city': rest_address[1],
+        'state': rest_address[2],
+        'pin_code': rest_address[3]
     }
+    cur.execute("select opening_time, closing_time from functional_time where functional_time_ID=%s", (rest_details[5],))
+    weekday_time = cur.fetchone()
+    if (weekday_time == None):
+        rest['weekday_opening_time'] = "12:00:00"
+        rest['weekday_closing_time'] = "20:00:00"
+    else:
+        rest['weekday_opening_time'] = weekday_time[0]
+        rest['weekday_closing_time'] = weekday_time[1]
+    cur.execute("select opening_time, closing_time from functional_time where functional_time_ID=%s", (rest_details[4],))
+    weekend_time = cur.fetchone()
+    if (weekend_time == None):
+        rest['weekend_opening_time'] = "12:00:00"
+        rest['weekend_closing_time'] = "23:00:00"
+    else:
+        rest['weekend_opening_time'] = weekend_time[0]
+        rest['weekend_closing_time'] = weekend_time[1]
     rest_name = rest['name']
 
     cur.execute("SELECT Orders.order_ID, Orders.order_placed_time, Orders.order_status, order_totals.net_price FROM Orders inner join restaurant on Orders.restaurant_ID = restaurant.restaurant_ID inner join ( SELECT Orders.order_ID, SUM(Menu_Item.unit_price * Order_Items.quantity) AS net_price FROM Orders JOIN Order_Items ON Orders.order_ID = Order_Items.order_ID JOIN Menu_Item ON Order_Items.item_ID = Menu_Item.item_ID GROUP BY Orders.order_ID ) order_totals on Orders.order_ID = order_totals.order_ID WHERE Orders.restaurant_ID = %s ORDER BY order_placed_time DESC LIMIT 10;", (rest_ID,))
