@@ -45,17 +45,17 @@
                 </div>
                 <div>
                   <button id="edit-btn" type="button" class="btn btn-primary">Edit</button>
-                  <form id="edit-form" style="display:none">
+                  <form method="POST" id="edit-form" style="display:none" >
                     <br>
                     <label for="address">Email:</label>
-                    <input type="text" id="email" name="email" >
+                    <input required type="email" id="email" name="email" >
                     <br>
                     <label for="phone">Phone Number:</label>
-                    <input type="phone_number" id="phone" name="phone" >
+                    <input required type="phone_number" id="phone" name="phone" >
                     <br>
-                    <!-- add more input fields here -->
-                    <input class="btn btn-primary mb-3" type="submit" value="Save Changes">
+                    <button id="savechagne" class="btn btn-primary mb-3" type="submit">Save Changes</button>
                   </form>
+                </div>
               </div>
             </div>
           </div>
@@ -79,12 +79,14 @@
      <!-- Givign option to selce the time show a Delieveries -->
     <div class="d-flex p-4 flex-column align-items-center justify-content-center">
       <div>
-        <select class="form-select form-select-lg mb-3 px-4 py-2" aria-label=".form-select-lg example">
+        <form id="form2" method="POST" >
+        <select type="submit" id="duration" name="duration" class="form-select form-select-lg mb-3 px-4 py-2" aria-label=".form-select-lg example">
           <option selected>Orders of duration?</option>
-          <option value="1">Today</option>
-          <option value="2">Last Week</option>
-          <option value="3">All</option>
+          <option value="today">Today</option>
+          <option value="lastweek">Last Week</option>
+          <option value="all">All</option>
         </select>
+      </form>
       </div>
       <div><h4 class="fw-bold">Your <span>All</span> Delieveries</h4></div>
     </div>
@@ -126,8 +128,10 @@
                     <p class="card-text"><span class="fw-bold"> Order time:</span> {{order["order_placed_time"]}}</p>
                     <p class="card-text"><span class="fw-bold"> Order status:</span> {{order["order_status"]}}</p>
                      <!-- Upadating delivery status for assign 4 -->
-                    {%if order["order_status"] == "delivered"%}
-                    <button type="submit" class="btn btn-primary">Ready</button>
+                    {%if order["order_status"] == "placed"%} 
+                    <form method="POST"> 
+                    <button type="submit" id="order_update" name="order_update" class="btn btn-primary" value={{order['order_ID']}}>Ready</button>
+                    </form>
                     {%endif%}
                   </div>
                 </div>
@@ -143,17 +147,26 @@
   <script>
       const editBtn = document.getElementById('edit-btn');
       const editForm = document.getElementById('edit-form');
+      const duration = document.getElementById('duration');
+      const savechagne = document.getElementById('savechagne');
+
+      duration.addEventListener("change", ()=>{
+        document.getElementById("form2").submit()
+        window.location.reload
+      })
       editBtn.addEventListener('click', () => {
         editForm.style.display = 'block';
       });
-      editForm.addEventListener('submit', (event) => {
+      savechange.addEventListener('submit', (event) => {
         event.preventDefault();
         // handle form submission here
         // you can use fetch() or XMLHttpRequest to send the updated data to the server
         // or update the HTML table directly using JavaScript
         // once the data is updated, hide the edit form again
         editForm.style.display = 'none';
+        window.location.reload
       });
+      
     </script>
 </section>
 

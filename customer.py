@@ -79,7 +79,6 @@ def restlist():
     rests = []
     if (len(rest_details)):
         for detail in rest_details:
-            print(detail)
             temp = {
                 'ID': detail[0],
                 'name':detail[1],

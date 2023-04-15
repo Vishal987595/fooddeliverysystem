@@ -24,24 +24,25 @@
             </form>
         </div>
     </div>
-    
-    <div class="container mb-4">
-        <div class="row flex-nowrap overflow-auto">
-            {% for type in cuisines %}
-            <div class="card col-12 col-sm-6 col-md-4 col-lg-3 mx-3 bg-light my-3" style="width: 18rem;">
-                <img src="{{'/static/Cuisine_Images/'+type + '.jpg'}}" class="card-img-top object-fit-fill mt-3" alt="cuisine type" style="height:10rem" >
+
+    <!--making card vetical assign 04-->
+    <div class="container">
+        <div class="flex row">
+        {% for type in cuisines %}
+        
+          <div class="col-md-6 col-lg-4 col-sm-12 mb-5">
+            <div class="card" style="width: 18rem;">
+                <img src="{{'/static/Cuisine_Images/'+type + '.jpg'}}" class="card-img-top" alt="cuisine type" style="height:12rem" >
                 <div class="card-body">
-                  <h5 class="card-title">{{type}}</h5>
-                  <form method="GET" action="{{ url_for('customer.restlist')}}">
-                    <div><button class="btn btn-primary" name="cuisine" value="{{type}}">Get Restaurants</button></div>
+                    <h5 class="card-title">{{type}}</h5>
+                    <form method="GET" action="{{ url_for('customer.restlist')}}">
+                      <div><button class="btn btn-primary" name="cuisine" value="{{type}}">Get Restaurants</button></div>
                     </form>
                 </div>
             </div>
-            {% endfor %}
-        </div>
-
+          </div>
+        {% endfor %}
     </div>
-
     
 </div>
 {% endblock content %}

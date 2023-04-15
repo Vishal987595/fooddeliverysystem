@@ -1,10 +1,10 @@
 from flask import jsonify, render_template, session, flash, request, redirect, url_for, Blueprint
-
+import datetime
 restaurant = Blueprint('restaurant', __name__)
 
 from app import mysql
 
-@restaurant.route('/restdetail', methods=['GET'])
+@restaurant.route('/restdetail', methods=['GET','POST'])
 def restdetail():
     rest_name = False
     try:
@@ -17,6 +17,42 @@ def restdetail():
         return render_template('restaurant/restdetail.html', rest_name=rest_name)
 
     cur = mysql.connection.cursor()
+
+    # Update for assign 04
+
+    order_update_id = request.form.get('order_update')
+    if (order_update_id != None):
+        cur.execute("update orders set order_status=%s where order_ID=%s", ("ready", order_update_id,))
+        mysql.connection.commit()
+
+    try: 
+        query = "SELECT Orders.order_ID, Orders.order_placed_time, Orders.order_status, order_totals.net_price FROM Orders inner join restaurant on Orders.restaurant_ID = restaurant.restaurant_ID inner join ( SELECT Orders.order_ID, SUM(Menu_Item.unit_price * Order_Items.quantity) AS net_price FROM Orders JOIN Order_Items ON Orders.order_ID = Order_Items.order_ID JOIN Menu_Item ON Order_Items.item_ID = Menu_Item.item_ID GROUP BY Orders.order_ID ) order_totals on Orders.order_ID = order_totals.order_ID WHERE Orders.restaurant_ID = %s ORDER BY order_placed_time DESC LIMIT 10;"
+        if request.method == 'POST' and 'email' in request.form and 'phone' in request.form:
+            email = request.form['email']
+            phone = request.form['phone']
+            cur.execute("update restaurant set email=%s where restaurant_ID=%s;",(email, rest_ID,))
+            cur.execute("update restaurant set phone_number=%s where restaurant_ID=%s;",(phone,rest_ID,))
+            mysql.connection.commit()
+            cur.execute(query, (rest_ID,))
+        elif request.method == 'POST' and 'duration' in request.form:
+            duration = request.form['duration']
+            if(duration=="all"):
+                cur.execute(query, (rest_ID,))
+            elif(duration=="today"):
+                duration = str(datetime.date.today())
+                cur.execute("SELECT Orders.order_ID, Orders.order_placed_time, Orders.order_status, order_totals.net_price FROM Orders inner join restaurant on Orders.restaurant_ID = restaurant.restaurant_ID inner join ( SELECT Orders.order_ID, SUM(Menu_Item.unit_price * Order_Items.quantity) AS net_price FROM Orders JOIN Order_Items ON Orders.order_ID = Order_Items.order_ID JOIN Menu_Item ON Order_Items.item_ID = Menu_Item.item_ID GROUP BY Orders.order_ID ) order_totals on Orders.order_ID = order_totals.order_ID WHERE Orders.restaurant_ID = %s and order_placed_time >= %s ORDER BY order_placed_time DESC LIMIT 10;", (rest_ID,duration,))
+            elif (duration=="lastweek"):
+                base = datetime.datetime.today()
+                week_time = str(base - datetime.timedelta(days=6)).split(" ")[0]
+                cur.execute("SELECT Orders.order_ID, Orders.order_placed_time, Orders.order_status, order_totals.net_price FROM Orders inner join restaurant on Orders.restaurant_ID = restaurant.restaurant_ID inner join ( SELECT Orders.order_ID, SUM(Menu_Item.unit_price * Order_Items.quantity) AS net_price FROM Orders JOIN Order_Items ON Orders.order_ID = Order_Items.order_ID JOIN Menu_Item ON Order_Items.item_ID = Menu_Item.item_ID GROUP BY Orders.order_ID ) order_totals on Orders.order_ID = order_totals.order_ID WHERE Orders.restaurant_ID = %s and (order_placed_time <= %s and order_placed_time > %s) ORDER BY order_placed_time DESC LIMIT 10;", (rest_ID,base,week_time,))
+        else:
+            cur.execute(query, (rest_ID,))
+        orders_rest = cur.fetchall()
+    except:
+        cur.execute(query, (rest_ID,))
+        orders_rest = cur.fetchall()
+    # update ends for assign 04
+
     query = "select name, email, phone_number, rating, weekend_time, weekday_time, rest_address from restaurant where restaurant_ID=%s;"
     cur.execute(query,(rest_ID,))
     rest_details = cur.fetchone()
@@ -49,12 +85,11 @@ def restdetail():
         rest['weekend_opening_time'] = weekend_time[0]
         rest['weekend_closing_time'] = weekend_time[1]
     rest_name = rest['name']
-
-    cur.execute("SELECT Orders.order_ID, Orders.order_placed_time, Orders.order_status, order_totals.net_price FROM Orders inner join restaurant on Orders.restaurant_ID = restaurant.restaurant_ID inner join ( SELECT Orders.order_ID, SUM(Menu_Item.unit_price * Order_Items.quantity) AS net_price FROM Orders JOIN Order_Items ON Orders.order_ID = Order_Items.order_ID JOIN Menu_Item ON Order_Items.item_ID = Menu_Item.item_ID GROUP BY Orders.order_ID ) order_totals on Orders.order_ID = order_totals.order_ID WHERE Orders.restaurant_ID = %s ORDER BY order_placed_time DESC LIMIT 10;", (rest_ID,))
-    orders_rest = cur.fetchall()
+    
     orders = []
     for order in orders_rest:
         temp = {
+            'order_ID': order[0],
             'order_placed_time':order[1],
             'order_status': order[2],
             'net_price': order[3], 

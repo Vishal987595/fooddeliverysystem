@@ -36,6 +36,7 @@ def login():
         useremail = request.form['useremail']
         password = request.form['password']
         authority = request.form['authority']
+        session['addr_ID'] = None
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         if (authority == "Customer"):
             cursor.execute("SELECT * FROM Customers WHERE email = % s AND password = % s", (useremail, password,))
@@ -44,6 +45,9 @@ def login():
                 session['customerbool'] = True
                 session['restbool'], session['agentbool'] = False, False
                 session['customer_ID'] = str(account['customer_ID'])
+                cursor.execute("select address_ID from customer_address where customer_ID=%s", (session['customer_ID'],))
+                addr_ID = cursor.fetchall()
+                session['addr_ID'] = addr_ID[0]
                 msg = 'Logged in successfully !'
                 flask.flash(msg)
                 return redirect(url_for('customer.dashboard'))
@@ -250,6 +254,7 @@ def aboutus():
 def logout():
     session.clear()
     return redirect(url_for('login'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)
