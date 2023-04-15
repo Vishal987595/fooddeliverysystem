@@ -139,8 +139,8 @@ def restmenu():
 @restaurant.route('/menuedit', methods=['GET', 'POST'])
 def menuedit():
     if request.method == 'GET':
-        if (request.values.get("newitem_ID")):
-            rest_ID = request.values.get("newitem_ID")
+        if (request.values.get("newitem")):
+            rest_ID = session['restaurant_ID']
             cur = mysql.connection.cursor()
             cur.execute("select max(item_ID) from menu_item")
             item_ID = cur.fetchone()[0]
@@ -158,22 +158,24 @@ def menuedit():
             return render_template('restaurant/editmenu.html', item=item)
         
         item_ID = request.values.get("item_ID")
-        print(item_ID)
         cur = mysql.connection.cursor()
-        cur.execute("select item_ID, veg, availability, name, unit_price, item_type from menu_item where item_ID = %s;", [item_ID])
+        cur.execute("select item_ID, veg, availability, name, unit_price, item_type, restaurant_ID from menu_item where item_ID = %s;", [item_ID])
         item_detail = cur.fetchone()
         if (item_detail is None):
             flash("Need to login as Restaurant")
             return redirect(url_for('login'))
-        item = {
-            'ID': item_detail[0],
-            'veg': item_detail[1],
-            'availability': item_detail[2],
-            'name': item_detail[3],
-            'unit_price': item_detail[4],
-            'item_type': item_detail[5]
-        }
-        return render_template('restaurant/editmenu.html', item = item) 
+        if (item_detail[6] == session['restaurant_ID']):
+            item = {
+                'ID': item_detail[0],
+                'veg': item_detail[1],
+                'availability': item_detail[2],
+                'name': item_detail[3],
+                'unit_price': item_detail[4],
+                'item_type': item_detail[5]
+            }
+            return render_template('restaurant/editmenu.html', item = item)
+        else:
+            flash("Wrond menu_item_ID for this restaurant.") 
     if request.method == 'POST':
         item_ID = request.values.get("item_ID")
         veg_novveg = request.values.get("veg")
@@ -188,5 +190,5 @@ def menuedit():
         msg = "Edited menu successfully!!"
         flash(msg)
         return redirect(url_for('restaurant.restmenu'))
-    redirect(url_for('restaurant.restmenu'))
+    return redirect(url_for('restaurant.restmenu'))
 
