@@ -35,9 +35,27 @@ def userprofile():
         return redirect(url_for('login'))
     ID = session['customer_ID']
     cursor = mysql.connection.cursor()
+    address_ID = request.form.get('address_ID')
+    if address_ID:
+        session['addr_ID'] = address_ID
+    
     cursor.execute("SELECT * FROM Customers WHERE customer_ID = %s", (ID,))
     account = cursor.fetchone()
     if account:
+        cursor.execute("select a.address_ID, building_name, street_name, city, state, pin_code from address a inner join customer_address c  on a.address_ID = c.address_ID where c.customer_ID = %s;",(ID,))
+        addressCust = cursor.fetchall()
+        addresses = []
+        for address in addressCust:
+            temp={
+                'address_ID':address[0],
+                'building_no':address[1],
+                'street_no':address[2],
+                'city':address[3],
+                'state':address[4],
+                'pin_code':address[5]
+            }
+            addresses.append(temp)
+        
         cursor.execute("SELECT Orders.order_ID, Orders.order_placed_time, Orders.order_status, restaurant.name as restaurant_name, order_totals.net_price FROM Orders inner join restaurant on Orders.restaurant_ID = restaurant.restaurant_ID inner join ( SELECT Orders.order_ID, SUM(Menu_Item.unit_price * Order_Items.quantity) AS net_price FROM Orders JOIN Order_Items ON Orders.order_ID = Order_Items.order_ID JOIN Menu_Item ON Order_Items.item_ID = Menu_Item.item_ID GROUP BY Orders.order_ID ) order_totals on Orders.order_ID = order_totals.order_ID WHERE customer_ID = (%s) ORDER BY order_placed_time DESC;",(ID,))
         orders_by_cust = cursor.fetchall()
         orders = []
@@ -57,7 +75,7 @@ def userprofile():
             "phone_no": account[5], 
             "order_placed": (len(orders) > 0), 
         }
-        return render_template('customer/userprofile.html', context=context, orders=orders)
+        return render_template('customer/userprofile.html', context=context, orders=orders, addresses=addresses)        
     return render_template('customer/userprofile.html')
 
 
