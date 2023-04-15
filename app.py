@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import flask
+import time
 
 import MySQLdb.cursors
 
@@ -56,6 +57,7 @@ def login():
                 flask.flash(msg)
                 return redirect(url_for('customer.dashboard'))
             else:
+                time.sleep(2)
                 msg = 'Incorrect username / password !'
         elif (authority == "Delivery Agent"):
             cursor.execute("SELECT * FROM delivery_agent WHERE email = % s AND password = % s", (useremail, password, ))
@@ -68,6 +70,7 @@ def login():
                 flask.flash(msg)
                 return redirect(url_for('delivery.agentdetail'))
             else:
+                time.sleep(2)
                 msg = 'Incorrect username / password !'
         elif (authority == "Restaurant"):
             cursor.execute("SELECT * FROM restaurant WHERE email = % s AND password = % s", (useremail, password, ))
@@ -81,8 +84,10 @@ def login():
                 flask.flash(msg)
                 return redirect(url_for('restaurant.restdetail'))
             else:
+                time.sleep(2)
                 msg = 'Incorrect username / password !'
         else:
+            time.sleep(2)
             msg = 'Incorrect username / password !'
         flask.flash(msg)
     return render_template('login.html', msg = msg)
