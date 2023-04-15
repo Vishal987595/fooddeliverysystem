@@ -39,6 +39,10 @@ def login():
         session['addr_ID'] = None
         cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         if (authority == "Customer"):
+            if("'" in useremail):
+                msg = "Single Quote (') is not allowed in username field."
+                flask.flash(msg)
+                return redirect(url_for('login'))
             cursor.execute("SELECT * FROM Customers WHERE email = % s AND password = % s", (useremail, password,))
             account = cursor.fetchone()
             if account:

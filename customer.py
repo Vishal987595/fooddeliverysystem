@@ -117,9 +117,12 @@ def getmenu():
         rest_ID = request.values.get("restaurant")
         session['restaurant_order'] = rest_ID
         cursor = mysql.connection.cursor()
-        cursor.execute("select name from restaurant where restaurant_ID = %s;", [rest_ID])
+        cursor.execute("select name, is_editing_menu from restaurant where restaurant_ID = %s;", [rest_ID])
         rest = cursor.fetchone()
         rest_name = rest[0]
+        is_editing_menu  = rest[1]
+        if is_editing_menu:
+            return render_template('customer/restaurant_unavailable.html')
         cursor.execute("select name, unit_price, veg, item_type, item_ID from menu_item where restaurant_ID = %s and menu_item.availability='1';", [rest_ID])
         menu_items = cursor.fetchall()
         items = []

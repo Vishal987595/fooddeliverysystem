@@ -142,6 +142,10 @@ def menuedit():
         if (request.values.get("newitem")):
             rest_ID = session['restaurant_ID']
             cur = mysql.connection.cursor()
+            cur.execute("START TRANSACTION;")
+            cur.execute("SELECT * FROM menu_item WHERE restaurant_ID = %s FOR UPDATE;", [rest_ID])
+            cur.execute("UPDATE restaurant SET is_editing_menu = 1 WHERE restaurant_ID = %s", [rest_ID])
+            mysql.connection.commit()
             cur.execute("select max(item_ID) from menu_item")
             item_ID = cur.fetchone()[0]
             item = {
@@ -158,6 +162,7 @@ def menuedit():
             return render_template('restaurant/editmenu.html', item=item)
         
         item_ID = request.values.get("item_ID")
+        rest_ID = session['restaurant_ID']
         cur = mysql.connection.cursor()
         cur.execute("select item_ID, veg, availability, name, unit_price, item_type, restaurant_ID from menu_item where item_ID = %s;", [item_ID])
         item_detail = cur.fetchone()
@@ -173,6 +178,9 @@ def menuedit():
                 'unit_price': item_detail[4],
                 'item_type': item_detail[5]
             }
+            #setting the is_editing_menu to 1
+            cur.execute("UPDATE restaurant SET is_editing_menu = 1 WHERE restaurant_ID = %s", [rest_ID])
+            mysql.connection.commit()
             return render_template('restaurant/editmenu.html', item = item)
         else:
             flash("Wrond menu_item_ID for this restaurant.") 
@@ -184,7 +192,10 @@ def menuedit():
         unit_price = request.values.get("unit_price")
         item_type = request.values.get("item_type")
         cur = mysql.connection.cursor()
+        cur.execute("START TRANSACTION;")
+        cur.execute("SELECT * FROM menu_item WHERE restaurant_ID = %s FOR UPDATE;", [rest_ID])
         cur.execute("UPDATE menu_item SET veg = %s, availability=%s, name=%s, unit_price =%s, item_type=%s where item_ID = %s;", (veg_novveg, availability, item_name, unit_price, item_type, item_ID,))
+        cur.execute("UPDATE restaurant SET is_editing_menu = 0 WHERE restaurant_ID = %s", [rest_ID])
         mysql.connection.commit()
         cur.close()
         msg = "Edited menu successfully!!"

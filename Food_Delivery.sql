@@ -100,6 +100,7 @@ CREATE TABLE Restaurant (
     password varchar(20) NOT NULL,
     caption VARCHAR(45) DEFAULT '' null,
 	img LONGBLOB default null,
+    is_editing_menu int(1) DEFAULT 0,
     PRIMARY KEY (restaurant_ID),
     FOREIGN KEY (weekend_time) REFERENCES Functional_Time (functional_time_ID),
     FOREIGN KEY (weekday_time) REFERENCES Functional_Time (functional_time_ID),
@@ -140,7 +141,7 @@ CREATE TABLE Orders (
 order_ID int(15) PRIMARY KEY,
 order_rating tinyint(1) default NULL check (order_rating>=0 and order_rating<=5) ,
 order_placed_time DATETIME NOT NULL,
-order_status VARCHAR(20) check(order_status in ('placed', 'picked', 'delivered')),
+order_status VARCHAR(20) check(order_status in ('placed', 'ready', 'picked', 'onway', 'delivered')),
 delivery_ID int(8) default null,
 restaurant_ID int(8),
 customer_ID int(8),
@@ -3631,7 +3632,7 @@ INSERT INTO food_delivery.functional_time VALUES
 
 
 ##########################################################################
-INSERT INTO food_delivery.restaurant VALUES
+INSERT INTO food_delivery.restaurant(restaurant_ID, name, email, phone_number, rating, weekend_time, weekday_time, rest_address, password, caption, img) VALUES
 (1,'Carroll Ltd','parker.pierce@example.org',1138859107,4.0,36,45,18,'parker.pierce', 'W ka Restaurant','https://user-images.githubusercontent.com/76462870/221657826-067aaeba-29e4-482e-a1ec-a20103cf073d.png'),
 (2,'Hessel, Gusikowski and Kl','koelpin.kelsi@example.com',536759886,3.3,36,28,68,'koelpin.kelsi','Pandu ka restaurant','https://user-images.githubusercontent.com/76462870/221657708-d92c647a-dce3-4483-9ae0-f0cd4c4febc7.png'),
 (3,'Hansen-Greenholt','vward@example.com',1154754225,4.9,38,6,58,'vward','CAPPADOCIA','https://user-images.githubusercontent.com/76462870/221657769-db6c8099-4083-4b01-bd56-8065fe575e12.png');
