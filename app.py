@@ -11,7 +11,8 @@ mysql = config(app)
 from restaurant import restaurant
 from customer import customer
 from delivery import delivery
-app.register_blueprint(restaurant)
+
+# app.register_blueprint(restaurant)
 app.register_blueprint(customer)
 app.register_blueprint(delivery)
 

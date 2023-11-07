@@ -1,7 +1,6 @@
 from flask import jsonify, render_template, session, flash, request, redirect, url_for, Blueprint
 import datetime
 restaurant = Blueprint('restaurant', __name__)
-
 from app import mysql
 
 @restaurant.route('/restdetail', methods=['GET','POST'])
